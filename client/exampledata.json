@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
     "0": {
         "0": {
             "angle": "+30",
@@ -60,44 +59,3 @@
         }
     }
 }
-=======
-	"0": {
-		"0": {
-			"angle": "+30",
-			"length": "2",
-			"type": "extension"
-		},
-		"1": {
-			"type": "leaf",
-			"size": "2"
-		}
-	},
-	"1": {
-		"0": {
-			"angle": "+40",
-			"length": "1",
-			"type": "extension"
-		},
-		"1": {
-			"angle": "-45",
-			"length": "2",
-			"type": "extension"
-		},
-		"2": {
-			"size": "1",
-			"type": "leaf"
-		}
-	},
-	"2": {
-		"0": {
-			"angle": "0",
-			"length": "1",
-			"type": "extension"
-		},
-		"1": {
-			"type": "leaf",
-			"size": "3"
-		}
-	}
-}
->>>>>>> c31ee532d41311313504828e43d55b18b0e3986b
