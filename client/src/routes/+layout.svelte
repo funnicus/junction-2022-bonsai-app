@@ -22,13 +22,15 @@
 
   .view {
     height: 100vh;
-    align-items: center;
     margin: 0;
     display: flex;
     flex-direction: column;
 
+    nav {
+      height: 25%;
+    }
     main {
-      flex: 1 1 75%;
+      height: 75%;
     }
   }
 
