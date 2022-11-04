@@ -35,6 +35,27 @@
         "1": {
             "type": "leaf",
             "size": "3"
+        },
+        "2": {
+            "type": "split",
+            "0": {
+                "type": "extension",
+                "length": "1",
+                "angle": "0"
+            },
+            "1": {
+                "type": "split",
+                "0": {
+                    "type": "extension",
+                    "length": "1",
+                    "angle": "0"
+                },
+                "1": {
+                    "type": "extension",
+                    "length": "1",
+                    "angle": "0"
+                }
+            }
         }
-    },
+    }
 }
