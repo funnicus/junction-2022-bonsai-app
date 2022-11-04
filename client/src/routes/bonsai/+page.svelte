@@ -1,9 +1,23 @@
+<script>
+  import bonsai from '$lib/assets/bonsai.svg';
+</script>
 
-<h1 style="font-size: 3em;">🅱️ONSAI 😂👌</h1>
+<div>
+  <img src={bonsai} alt="bonsai">
+</div>
 
 <style lang="scss">
   h1 {
     text-align: center;
     margin-top: 2em;
+  }
+
+  img {
+    margin: auto;
+  }
+
+  div {
+    display: flex;
+    height: 100%;
   }
 </style>
