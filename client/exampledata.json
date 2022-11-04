@@ -1,14 +1,129 @@
 [
 	{
 		"length": 3,
+		"type": "extension",
+		"taskId": "9843kl43k5j43l5j43",
+		"time": 32948024230948,
 		"angle": 30,
 		"children": [
 			{
 				"length": 5,
-				"tpye": "leaf",
+				"type": "extension",
+				"taskId": "9843kl43k5j43l5j43",
+				"time": 32948024230948
+			},
+			{
+				"length": 5,
+				"type": "extension",
+				"taskId": "9843kl43k5j43l5j43",
+				"time": 32948024230948,
 				"children": [
 					{
-						"length": 3
+						"length": 5,
+						"type": "leaf",
+						"children": []
+					}
+				]
+			}
+		]
+	},
+	{
+		"length": 5,
+		"type": "extension",
+		"taskId": "9843kl43k5j43l5j43",
+		"time": 32948024230948,
+		"children": [
+			{
+				"length": 5,
+				"type": "extension",
+				"taskId": "9843kl43k5j43l5j43",
+				"time": 32948024230948,
+				"children": [
+					{
+						"length": 5,
+						"type": "extension",
+						"taskId": "9843kl43k5j43l5j43",
+						"time": 32948024230948,
+						"children": [
+							{
+								"length": 5,
+								"type": "extension",
+								"taskId": "9843kl43k5j43l5j43",
+								"time": 32948024230948,
+								"children": [
+									{
+										"length": 5,
+										"type": "extension",
+										"taskId": "9843kl43k5j43l5j43",
+										"time": 32948024230948,
+										"children": [
+											{
+												"length": 5,
+												"type": "extension",
+												"taskId": "9843kl43k5j43l5j43",
+												"time": 32948024230948,
+												"children": [
+													{
+														"length": 5,
+														"type": "extension",
+														"taskId": "9843kl43k5j43l5j43",
+														"time": 32948024230948,
+														"children": [
+															{
+																"length": 5,
+																"type": "extension",
+																"taskId": "9843kl43k5j43l5j43",
+																"time": 32948024230948,
+																"children": [
+																	{
+																		"length": 5,
+																		"type": "extension",
+																		"taskId": "9843kl43k5j43l5j43",
+																		"time": 32948024230948,
+																		"children": [
+																			{
+																				"length": 5,
+																				"type": "extension",
+																				"taskId": "9843kl43k5j43l5j43",
+																				"time": 32948024230948,
+																				"children": [
+																					{
+																						"length": 5,
+																						"type": "extension",
+																						"taskId": "9843kl43k5j43l5j43",
+																						"time": 32948024230948,
+																						"children": [
+																							{
+																								"length": 5,
+																								"type": "extension",
+																								"taskId": "9843kl43k5j43l5j43",
+																								"time": 32948024230948,
+																								"children": [
+																									{
+																										"type": "leaf",
+																										"taskId": "9843kl43k5j43l5j43",
+																										"time": 32948024230948,
+																										"children": []
+																									}
+																								]
+																							}
+																						]
+																					}
+																				]
+																			}
+																		]
+																	}
+																]
+															}
+														]
+													}
+												]
+											}
+										]
+									}
+								]
+							}
+						]
 					}
 				]
 			}
