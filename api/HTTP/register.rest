@@ -1,4 +1,4 @@
-POST https://bonsai-health.shuttleapp.rs/login HTTP/1.1
+POST https://bonsai-health.shuttleapp.rs/register HTTP/1.1
 Content-Type: application/json
 
 {

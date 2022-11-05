@@ -5,7 +5,6 @@
 	import { onMount, setContext } from "svelte";
 	import type { Data } from "$lib/dataSchema";
 	import { createMenuStore } from "$lib/stores/menu";
-	import { userStore } from "$lib/stores/user";
 	import { goto } from "$app/navigation";
 
   export let tree: Data[];
@@ -84,20 +83,32 @@
   }
 
   .page.menuOpen .tree-view {
-    transform: scale(1.25) translateY(-70px);
+    transform: scale(1) translateX(-100px) translateY(150px);
   }
 
   .menu {
     position: absolute;
     display: flex;
     bottom: 2rem;
+    right: 2rem;
     justify-content: center;
     opacity: 0;
     transition: opacity 200ms;
   }
   
   .menu.visible {
-    opacity: 1;
+    opacity: .8;
+  }
+
+  @media screen and (max-width: 700px) {
+    .page.menuOpen .tree-view {
+      transform: scale(1) translateY(-80px);
+    }
+
+
+    .menu {
+      right: unset;
+    }
   }
 </style>
 

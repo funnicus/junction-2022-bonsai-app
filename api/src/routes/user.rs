@@ -10,7 +10,6 @@ use crate::{authentication::Claims, MyState};
 
 #[derive(Serialize, Deserialize, FromRow)]
 pub struct User {
-    pub id: i32,
     pub username: String,
     pub password_hash: String,
     data: serde_json::Value,
@@ -18,8 +17,12 @@ pub struct User {
     quiz_results: serde_json::Value,
 }
 #[derive(Serialize, Deserialize)]
+pub struct RegisterRequest {
+    username: String,
+    password: String,
+}
+#[derive(Serialize, Deserialize)]
 pub struct UserResponse {
-    pub id: i32,
     pub username: String,
     data: serde_json::Value,
     completed_tasks: Vec<i32>,
@@ -27,7 +30,6 @@ pub struct UserResponse {
 impl UserResponse {
     pub fn from_user(user: User) -> Self {
         UserResponse {
-            id: user.id,
             username: user.username,
             data: user.data,
             completed_tasks: user.completed_tasks,
@@ -108,6 +110,44 @@ pub async fn complete_task(
     Ok(Status::Ok)
 }
 
+#[post("/register", data = "<data>")]
+pub async fn register(
+    state: &State<MyState>,
+    data: Json<RegisterRequest>,
+) -> Result<Json<UserResponse>, BadRequest<String>> {
+    let salt = SaltString::generate(&mut OsRng);
+
+    // Argon2 with default params (Argon2id v19)
+    let argon2 = Argon2::default();
+
+    // Hash password to PHC string ($argon2id$v=19$...)
+    let password_hash = argon2
+        .hash_password(data.0.password.as_bytes(), &salt)
+        .map_err(|err| BadRequest(Some(err.to_string())))?
+        .to_string();
+
+    let user = Json(User {
+        username: data.0.username,
+        password_hash,
+        data: serde_json::Value::Null,
+        completed_tasks: vec![],
+        quiz_results: serde_json::Value::Null,
+    });
+    let user:User = sqlx::query_as(
+        "INSERT INTO users(username, password_hash, data, completed_tasks, quiz_results) VALUES ($1,$2,$3, $4, $5) RETURNING id, username, password_hash, data, completed_tasks, quiz_results",
+    )
+    .bind(&user.username)
+    .bind(&user.password_hash)
+    .bind(&user.data)
+    .bind(&user.completed_tasks)
+    .bind(&user.quiz_results)
+    .fetch_one(&state.0)
+    .await
+    .map_err(|e| BadRequest(Some(e.to_string())))?;
+
+    Ok(Json(UserResponse::from_user(user)))
+}
+
 // NOTE: This is a hardcoded test user
 #[get("/create_user")]
 pub async fn create_user(state: &State<MyState>) -> Result<Json<UserResponse>, BadRequest<String>> {
@@ -123,7 +163,6 @@ pub async fn create_user(state: &State<MyState>) -> Result<Json<UserResponse>, B
         .to_string();
 
     let user = Json(User {
-        id: 1,
         username: "test".to_string(),
         password_hash,
         data: serde_json::Value::Null,
