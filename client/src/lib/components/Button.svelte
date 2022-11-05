@@ -1,7 +1,7 @@
 <script lang="ts">
   export let type: string | undefined;
   export let style = "";
-  export let onClick: (event: Event) => void | Promise<void> | undefined;
+  export let onClick: ((event: Event) => void | Promise<void>) | undefined = undefined;
 </script>
 
 <button style={style} type={type} on:click={onClick} class="button"> <b><slot></slot></b> </button>
