@@ -6,6 +6,7 @@
 	import type { Data } from "$lib/dataSchema";
 	import { createMenuStore } from "$lib/stores/menu";
 	import { goto } from "$app/navigation";
+	import ToolTips from "$lib/components/ToolTips.svelte";
 
   export let tree: Data[];
 
@@ -52,6 +53,8 @@
 </script>
 
 <svelte:window on:keydown={handleKeyDown} on:keyup={handleKeyUp} /> 
+
+<ToolTips />
 
 <div class="page" class:menuOpen={$menuState.state > -1}>
   <div class="tree-view">

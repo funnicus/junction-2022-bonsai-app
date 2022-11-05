@@ -6,7 +6,6 @@
   import QuestionMark from "$lib/icons/QuestionMark.svelte";
   
   import { userStore } from "$lib/stores/user";
-	import ToolTips from "$lib/components/ToolTips.svelte";
 
   onMount(() => {
     $userStore = window.localStorage.getItem("token") || "";
@@ -39,8 +38,6 @@
     {/if}
   </div>
 </nav>
-
-<ToolTips />
 
 <main>
   <slot></slot>
