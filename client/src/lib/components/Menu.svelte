@@ -30,7 +30,6 @@
 
     function handleBackClick(){
         if($state.state === 0){
-            console.log("Closing menu");
             treeState.setSelectedNode(null)
 
         }
