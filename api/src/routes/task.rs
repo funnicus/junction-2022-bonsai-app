@@ -1,12 +1,11 @@
 use rocket::{http::Status, response::status::BadRequest, serde::json::Json, State};
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 use sqlx::FromRow;
 
-use crate::{authentication::Claims, routes::user::UserResponse, MyState};
+use crate::MyState;
 
-#[derive(Serialize, Deserialize, FromRow)]
+#[derive(Serialize, FromRow)]
 pub struct Task {
-    id: i32,
     title: String,
     description: String,
     category: String,
@@ -28,7 +27,7 @@ pub async fn add_task(
     data: Json<serde_json::Value>,
 ) -> Result<Status, BadRequest<String>> {
     let _user: Task = sqlx::query_as(
-        "INSERT INTO tasks(title, description) VALUES ($1,$2) RETURNING title, description",
+        "INSERT INTO tasks(title, description, category) VALUES ($1,$2,$3) RETURNING title, description, category",
     )
     .bind(data.0.get("title").unwrap())
     .bind(data.0.get("description").unwrap())

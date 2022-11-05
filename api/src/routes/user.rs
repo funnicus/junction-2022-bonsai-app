@@ -8,7 +8,7 @@ use sqlx::FromRow;
 
 use crate::{authentication::Claims, MyState};
 
-#[derive(Serialize, Deserialize, FromRow)]
+#[derive(FromRow)]
 pub struct User {
     pub username: String,
     pub password_hash: String,
@@ -16,12 +16,12 @@ pub struct User {
     completed_tasks: Vec<i32>,
     quiz_results: serde_json::Value,
 }
-#[derive(Serialize, Deserialize)]
+#[derive(Deserialize)]
 pub struct RegisterRequest {
     username: String,
     password: String,
 }
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize)]
 pub struct UserResponse {
     pub username: String,
     data: serde_json::Value,
@@ -35,15 +35,6 @@ impl UserResponse {
             completed_tasks: user.completed_tasks,
         }
     }
-}
-#[derive(Serialize, Deserialize)]
-struct Data {
-    r#type: String,
-    time: i32,
-    children: Vec<Data>,
-    taskId: String,
-    angle: Option<i32>,
-    length: Option<i32>,
 }
 
 #[get("/data")]
