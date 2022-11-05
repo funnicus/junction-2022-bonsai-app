@@ -73,7 +73,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border: 1px solid red;
     width: 100vw;
     height: 100vh;
     overflow: hidden;
