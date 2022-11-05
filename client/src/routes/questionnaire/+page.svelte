@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Button from "$lib/components/Button.svelte";
   import { goto } from "$app/navigation";
-  import QuestionSlider from "$lib/components/QuestionSlider.svelte";
+  import QuestionSlider from "$lib/components/asdas.svelte";
 
   let physicalActivity = 0;
 
