@@ -9,6 +9,7 @@ struct Task {
     id: i32,
     title: String,
     description: String,
+    category: String,
 }
 
 #[get("/get_tasks")]
@@ -35,6 +36,7 @@ pub async fn add_task(
     )
     .bind(data.0.get("title").unwrap())
     .bind(data.0.get("description").unwrap())
+    .bind(data.0.get("category").unwrap())
     .fetch_one(&state.0)
     .await
     .map_err(|e| BadRequest(Some(e.to_string())))?;
