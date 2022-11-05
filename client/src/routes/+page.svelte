@@ -26,11 +26,6 @@
 
 </script>
 
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
-
-<a href="/bonsai">To 🅱️ONSAI</a>
-
 <svelte:window on:keydown={handleKeyDown} on:keyup={handleKeyUp} /> 
 
 <div>
@@ -60,6 +55,10 @@
   label {
     display: flex;
     flex-direction: column;
+  }
+
+  .tree-view {
+    display: flex;
   }
 </style>
 

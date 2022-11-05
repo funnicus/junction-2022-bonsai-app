@@ -27,7 +27,7 @@ struct User {
     pub password_hash: String,
     data: serde_json::Value,
 }
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 struct UserResponse {
     pub id: i32,
     pub username: String,
@@ -155,6 +155,22 @@ async fn get_user(
     Ok(Json(UserResponse::from_user(user)))
 }
 
+#[post("/user/edit_tree", data = "<data>")]
+async fn edit_tree(
+    state: &State<MyState>,
+    claims: Claims,
+    data: Json<serde_json::Value>,
+) -> Result<Json<UserResponse>, BadRequest<String>> {
+    let user = sqlx::query_as("UPDATE users SET data = $1 WHERE username = $2")
+        .bind(data.0)
+        .bind(claims.name)
+        .fetch_one(&state.0)
+        .await
+        .map_err(|e| BadRequest(Some(e.to_string())))?;
+
+    Ok(Json(UserResponse::from_user(user)))
+}
+
 #[shuttle_service::main]
 async fn rocket(#[shuttle_shared_db::Postgres] pool: PgPool) -> shuttle_service::ShuttleRocket {
     // For testing purposes we reinit database on deployment
@@ -166,5 +182,5 @@ async fn rocket(#[shuttle_shared_db::Postgres] pool: PgPool) -> shuttle_service:
     Ok(rocket::build()
         .manage(state)
         .attach(Cors)
-        .mount("/", routes![index, create_user, get_user, login]))
+        .mount("/", routes![index, create_user, get_user, login, edit_tree]))
 }
