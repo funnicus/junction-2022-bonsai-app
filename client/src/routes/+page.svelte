@@ -45,12 +45,6 @@
     <Menu />
 </div>
 
-
-
-
-<button on:click={() => $treeStore.selectedNode && treeStore.removeNode($treeStore.selectedNode)}>delete node</button>
-<button on:click={treeStore.addLeaf}>add leaf</button>
-
 <style>
   label {
     display: flex;

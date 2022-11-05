@@ -54,8 +54,11 @@
     function resetState(){
         // Menu is hidden
         $state.state = -1;
-        // math.random :D
-        tree.addExtension($tree.previewAngle, $tree.previewLength)
+        if(Math.random() > 0.7){
+            tree.addLeaf();
+        }
+        tree.addExtension($tree.previewAngle, $tree.previewLength);
+        tree.setSelectedNode(null);
     }
 </script>
 
