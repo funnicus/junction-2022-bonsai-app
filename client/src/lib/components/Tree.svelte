@@ -13,8 +13,8 @@
 
 <svg viewBox="0 0 500 500" width="500">
   <g transform="translate(250 400) rotate(180)">
-    {#each nodes as n, i (n.time)}
-      <TreeNode node={n} depth={1} width={15} {selectedNode} on:select {angle} {length} index={i} />
+    {#each nodes as n (n.time)}
+      <TreeNode node={n} depth={1} width={15} {selectedNode} on:select {angle} {length} />
     {/each}
   </g>
 
