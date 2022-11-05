@@ -1,3 +1,7 @@
+<script lang="ts">
+	import { userStore } from "$lib/stores/user";
+</script>
+
 <div class="tooltips">
   <ul>
     <li>Hold TAB to hide leaves</li>
@@ -5,6 +9,10 @@
 
 
   <p>Click on the tree to begin</p>
+
+  {#if !$userStore}
+    <p>Login to save your progress</p>
+  {/if}
 </div>
 
 <style lang="scss">

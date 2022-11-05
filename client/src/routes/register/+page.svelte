@@ -11,14 +11,21 @@
 
     const data = await fetch("https://bonsai-health.shuttleapp.rs/register", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    }).then((res) => res.json());
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username,
+        password
+      }),
+    }).then((res) => res.json()).catch(() => alert("Try again!"));;
 
     $userStore = await data.token;
 
     window.localStorage.setItem("token", $userStore);
     window.localStorage.setItem("username", data.username);
+
+    alert("Registered!")
 
     goto("/");
   }

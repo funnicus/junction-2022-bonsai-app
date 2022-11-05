@@ -26,6 +26,7 @@
           window.localStorage.removeItem("token")
           window.localStorage.removeItem("tree")
           $userStore = ""
+          alert("Logged out!")
           goto("/login")
         }
       }>Logout</button>

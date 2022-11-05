@@ -11,14 +11,23 @@
 
     const data = await fetch("https://bonsai-health.shuttleapp.rs/login", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    }).then((res) => res.json());
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username,
+        password
+      }),
+    }).then((res) => res.json()).catch(err => alert("Try again!"));
+
+    if(!data) return;
 
     $userStore = data.token;
 
     window.localStorage.setItem("token", $userStore);
     window.localStorage.setItem("username", data.username);
+
+    alert("You have successfully logged in!")
 
     goto("/");
   }

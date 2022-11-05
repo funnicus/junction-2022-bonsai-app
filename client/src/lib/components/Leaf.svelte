@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Leaf1 from "$lib/icons/Leaf1.svelte";
 	import Leaf2 from "$lib/icons/Leaf2.svelte";
-import type { TreeStore } from "$lib/stores/tree";
+  import type { TreeStore } from "$lib/stores/tree";
 	import { generateLeafPath } from "$lib/utils/path";
   import random from 'seedrandom';
 
