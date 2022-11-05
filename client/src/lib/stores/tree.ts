@@ -1,6 +1,5 @@
 import type { Data } from '$lib/dataSchema';
 import { writable, type Writable } from 'svelte/store';
-import treeData from '$lib/assets/tree.json';
 
 type TreeState = {
 	selectedNode: Data | null;

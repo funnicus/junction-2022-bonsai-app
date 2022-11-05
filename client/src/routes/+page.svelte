@@ -29,7 +29,6 @@
   setContext('menuState', menuState);
   setContext('tree', treeStore);
 
-
   onMount(() => {
     fetch("https://bonsai-health.shuttleapp.rs/").then((data) => console.log(data))
   })
@@ -45,22 +44,6 @@
 <div style="display: flex; justify-content: center;">
     <Menu />
 </div>
-
-<label>
-  angle: {$treeStore.previewAngle} deg
-  <input type="range" min="-45" max="45" bind:value={$treeStore.previewAngle} />
-</label>
-
-<label>
-  length: {$treeStore.previewLength}
-  <input type="range" min="20" max="75" bind:value={$treeStore.previewLength} />
-</label>
-
-<button on:click={() => $treeStore.selectedNode && treeStore.removeNode($treeStore.selectedNode)}>delete node</button>
-<button on:click={treeStore.addLeaf}>add leaf</button>
-<button on:click={() => treeStore.addExtension($treeStore.previewAngle, $treeStore.previewLength)}>
-  add extension
-</button>
 
 <style>
   label {
