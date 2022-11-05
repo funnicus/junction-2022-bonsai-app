@@ -33,7 +33,7 @@
 </div>
 
 <div style="display: flex; justify-content: center;">
-    <Menu />
+    <Menu state={0} />
 </div>
 
 <label>
