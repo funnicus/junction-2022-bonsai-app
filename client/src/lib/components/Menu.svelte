@@ -5,8 +5,10 @@
 	import Check from "$lib/icons/Check.svelte";
 	import { getContext } from "svelte";
 	import type { Writable } from "svelte/store";
+	import type { TreeStore } from "$lib/stores/tree";
 
     const state = getContext<Writable<{state: number}>>('menuState');
+    const tree = getContext<TreeStore>('tree');
     let selectedOption: MenuItem;
 
     const menuContent: MenuContent = {
@@ -55,14 +57,24 @@
 {#if $state.state >= 0}
 <div class="menuContainer">
 
-    {#if $state.state !== 0 && $state.state !== 2}
+    {#if $state.state === 0}
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <div class="backIcon" on:click={handleBackClick}>
+            <CloseIcon />
+        </div>
+
+        <input type="range" min="-45" max="45" bind:value={$tree.previewAngle} />
+
+    {/if}  
+
+    {#if $state.state !== 1 && $state.state !== 3}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="backIcon" on:click={handleBackClick}>
             <ArrowLeft />
         </div>
     {/if}
 
-    {#if $state.state === 0}
+    {#if $state.state === 1}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="backIcon" on:click={handleBackClick}>
             <CloseIcon />
@@ -78,7 +90,7 @@
         {/each}
     {/if}    
     
-    {#if $state.state === 1}
+    {#if $state.state === 2}
         <div class="title">
             <b>{selectedOption.title}</b>
         </div>
@@ -88,7 +100,7 @@
         <button class="button" on:click={handleOptionCompletion}> <b> Mark as complete </b> </button>
     {/if}
 
-    {#if $state.state === 2}
+    {#if $state.state === 3}
         <div class="title">
             <b>
                 <i>{selectedOption.title}</i> complete!
