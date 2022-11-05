@@ -8,6 +8,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE tasks (
+  id serial PRIMARY KEY,
   title VARCHAR(100),
   description VARCHAR(100)
 )

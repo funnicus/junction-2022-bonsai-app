@@ -14,12 +14,14 @@ pub struct User {
     pub username: String,
     pub password_hash: String,
     data: serde_json::Value,
+    completedTasks: Vec<i32>,
 }
 #[derive(Serialize, Deserialize)]
 pub struct UserResponse {
     pub id: i32,
     pub username: String,
     data: serde_json::Value,
+    completedTasks: Vec<i32>,
 }
 impl UserResponse {
     pub fn from_user(user: User) -> Self {
@@ -27,6 +29,7 @@ impl UserResponse {
             id: user.id,
             username: user.username,
             data: user.data,
+            completedTasks: user.completedTasks,
         }
     }
 }
@@ -88,6 +91,7 @@ pub async fn create_user(state: &State<MyState>) -> Result<Json<UserResponse>, B
         username: "test".to_string(),
         password_hash,
         data: serde_json::Value::Null,
+        completedTasks: vec![],
     });
     let user:User = sqlx::query_as(
         "INSERT INTO users(username, password_hash, data) VALUES ($1,$2,$3) RETURNING id, username, password_hash, data",

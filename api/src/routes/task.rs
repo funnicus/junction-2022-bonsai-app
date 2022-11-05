@@ -10,6 +10,7 @@ use crate::{authentication::Claims, routes::user::UserResponse, MyState};
 
 #[derive(Serialize, Deserialize, FromRow)]
 struct Task {
+    id: i32,
     title: String,
     description: String,
 }
