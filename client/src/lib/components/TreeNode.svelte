@@ -1,6 +1,7 @@
 <script lang="ts">
+	import type { TreeStore } from "$lib/stores/tree";
 	import { degToRad } from "$lib/utils/number";
-	import { createEventDispatcher } from "svelte";
+	import { createEventDispatcher, getContext } from "svelte";
 	import { scale } from "svelte/transition";
 	import type { Data } from "../dataSchema";
 	import Leaf from "./Leaf.svelte";
@@ -8,20 +9,15 @@
   export let node: Data
   export let depth: number
   export let width: number;
-  export let selectedNode: Data | null
 
-  // used for preview
-  export let angle: number;
-  export let length: number;
+  const tree = getContext<TreeStore>('tree')
 
-  $: selected = selectedNode === node
+  $: selected = $tree.selectedNode === node
 
   const x2 = -Math.sin(degToRad(node?.angle)) * (node?.length ?? 0)
   const y2 = Math.cos(degToRad(node?.angle)) * (node?.length ?? 0)
 
   const currentWidth = Math.max(width - (depth*1.5), 3);
-
-  const dispatch = createEventDispatcher();
 </script>
 
 <g
@@ -34,7 +30,7 @@
   {#if node.type === "extension"}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <polygon
-      on:click={() => dispatch('select', selected ? null : node)}
+      on:click={() => tree.setSelectedNode(selected ? null : node)}
       class:selected
       points="
         {-currentWidth/2},0
@@ -52,16 +48,16 @@
         <line
           x1={0}
           y1={0}
-          x2={-Math.sin(degToRad(angle)) * ((length-4) ?? 0)}
-          y2={Math.cos(degToRad(angle)) * ((length-4) ?? 0)}
+          x2={-Math.sin(degToRad($tree.previewAngle)) * (($tree.previewLength-4) ?? 0)}
+          y2={Math.cos(degToRad($tree.previewAngle)) * (($tree.previewLength-4) ?? 0)}
           stroke-dasharray="4"
           stroke="blue"
           stroke-width={3}
         />
 
         <circle
-          cx={-Math.sin(degToRad(angle)) * (length ?? 0)}
-          cy={Math.cos(degToRad(angle)) * (length ?? 0)}
+          cx={-Math.sin(degToRad($tree.previewAngle)) * (($tree.previewLength-4) ?? 0)}
+          cy={Math.cos(degToRad($tree.previewAngle)) * (($tree.previewLength-4) ?? 0)}
           r="5"
           stroke="blue"
           fill="transparent"
@@ -75,15 +71,11 @@
           node={child}
           depth={depth + 1}
           {width}
-          {selectedNode}
-          on:select
-          {angle}
-          {length}
         />
       {/each}
     </g>
   {:else}
-    <Leaf depth={depth + 1} {width} on:click={() => dispatch('select', node)} />
+    <Leaf depth={depth + 1} {width} />
   {/if}
 </g>
 
