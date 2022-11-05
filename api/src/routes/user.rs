@@ -74,6 +74,22 @@ pub async fn edit_tree(
     Ok(Status::Ok)
 }
 
+#[post("/edit_quiz", data = "<data>")]
+pub async fn edit_quiz(
+    state: &State<MyState>,
+    claims: Claims,
+    data: Json<serde_json::Value>,
+) -> Result<Status, BadRequest<String>> {
+    let _user: User = sqlx::query_as("UPDATE users SET quiz_results = $1 WHERE username = $2")
+        .bind(data.0)
+        .bind(claims.name)
+        .fetch_one(&state.0)
+        .await
+        .map_err(|e| BadRequest(Some(e.to_string())))?;
+
+    Ok(Status::Ok)
+}
+
 #[post("/complete_task", data = "<task_id>")]
 pub async fn complete_task(
     state: &State<MyState>,
