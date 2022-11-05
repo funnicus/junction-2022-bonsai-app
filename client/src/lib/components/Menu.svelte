@@ -3,8 +3,10 @@
     import ArrowLeft from "$lib/icons/ArrowLeft.svelte";
 	import CloseIcon from "$lib/icons/CloseIcon.svelte";
 	import Check from "$lib/icons/Check.svelte";
+	import { getContext } from "svelte";
+	import type { Writable } from "svelte/store";
 
-    export let state: number;
+    const state = getContext<Writable<{state: number}>>('menuState');
     let selectedOption: MenuItem;
 
     const menuContent: MenuContent = {
@@ -23,46 +25,44 @@
 
     function handleOptionSelection(selection: MenuItem){
         selectedOption = selection;
-        console.log(`Switching state from ${state} to ${state + 1}`)
-        if(state < 0 || state > 2){
-            state = 1;
+        console.log(`Switching state from ${$state.state} to ${$state.state + 1}`)
+        if($state.state < 0){
+            $state.state = 1;
         }else{
-            state++;
+            $state.state++;
         }
     }
 
     function handleBackClick(){
-        if(state === 0){
+        if($state.state === 0){
             console.log("Closing menu")
         }
-        console.log(`Switching state from ${state} to ${state - 1}`)
-        state--;
+        console.log(`Switching state from ${$state.state} to ${$state.state - 1}`)
+        $state.state--;
     }
 
     function handleOptionCompletion(){
-        console.log(`Switching state from ${state} to ${state + 1}`)
-        state++;
+        console.log(`Switching state from ${$state.state} to ${$state.state + 1}`)
+        $state.state++;
     }
 
     function resetState(){
         // Menu is hidden
-        state = -1;
+        $state.state = -1;
     }
 </script>
 
-{#if state >= 0}
+{#if $state.state >= 0}
 <div class="menuContainer">
-    
-    
 
-    {#if state !== 0 && state !== 2}
+    {#if $state.state !== 0 && $state.state !== 2}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="backIcon" on:click={handleBackClick}>
             <ArrowLeft />
         </div>
     {/if}
 
-    {#if state === 0}
+    {#if $state.state === 0}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="backIcon" on:click={handleBackClick}>
             <CloseIcon />
@@ -78,7 +78,7 @@
         {/each}
     {/if}    
     
-    {#if state === 1}
+    {#if $state.state === 1}
         <div class="title">
             <b>{selectedOption.title}</b>
         </div>
@@ -88,7 +88,7 @@
         <button class="button" on:click={handleOptionCompletion}> <b> Mark as complete </b> </button>
     {/if}
 
-    {#if state === 2}
+    {#if $state.state === 2}
         <div class="title">
             <b>
                 <i>{selectedOption.title}</i> complete!

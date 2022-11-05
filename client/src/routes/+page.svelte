@@ -2,7 +2,13 @@
 	import Tree from "$lib/components/Tree.svelte";
 	import { createTreeStore } from "$lib/stores/tree";
   import Menu from "$lib/components/Menu.svelte";
-	import { onMount } from "svelte";
+	import { onMount, setContext } from "svelte";
+	import type { Data } from "$lib/dataSchema";
+	import { createMenuStore } from "$lib/stores/menu";
+
+  export let tree: Data[];
+
+  let menuState = createMenuStore();
 
   const treeStore = createTreeStore()
 
@@ -20,6 +26,9 @@
     }
   }
 
+  setContext('menuState', menuState);
+
+
   onMount(() => {
     fetch("https://bonsai-health.shuttleapp.rs/").then((data) => console.log(data))
   })
@@ -33,7 +42,7 @@
 </div>
 
 <div style="display: flex; justify-content: center;">
-    <Menu state={0} />
+    <Menu />
 </div>
 
 <label>

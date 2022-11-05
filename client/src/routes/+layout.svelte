@@ -5,6 +5,7 @@
 
 <nav>
   <a href="/settings"><Settings /></a>
+  <a href="questionnaire">Questions</a>
 </nav>
 
 <main>
@@ -13,9 +14,18 @@
 
 
 <style lang="scss" global>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap');
+
   :root {
-    background: #FFE2D1;
+    --bg: #FFE2D1;
+    --brown: #A15022;
+    --light-brown: #a15122bf;
+
+    background: var(--bg);
     height: 100%;
+    font-family: "Inter", sans-serif;
+
+    color: var(--brown);
   }
 
   nav {
@@ -39,10 +49,10 @@
     flex-direction: column;
 
     nav {
-      height: 25%;
+      height: 3%;
     }
     main {
-      height: 75%;
+      height: 97%;
     }
   }
 
