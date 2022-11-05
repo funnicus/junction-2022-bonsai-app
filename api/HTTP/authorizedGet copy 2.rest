@@ -1,0 +1,3 @@
+GET https://bonsai-health.shuttleapp.rs/user HTTP/1.1
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoidGVzdCIsImV4cCI6MTY2NzY0MzQwMX0.2R2CT6z0Oh_AqKcp77KP05GLtV1lz9c72cV0U6u3yhs
+// NOTE: Token is here for testing purposes

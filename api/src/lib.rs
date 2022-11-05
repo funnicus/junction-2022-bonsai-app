@@ -1,4 +1,5 @@
 mod authentication;
+mod cors;
 
 #[macro_use]
 extern crate rocket;
@@ -8,10 +9,12 @@ use argon2::{
     Argon2, PasswordHash, PasswordVerifier,
 };
 use authentication::Claims;
+use cors::Cors;
 use rocket::response::status::{BadRequest, Unauthorized};
 use rocket::serde::json::Json;
 use rocket::State;
 use serde::{Deserialize, Serialize};
+use serde_json::json;
 use shuttle_service::error::CustomError;
 use sqlx::{Executor, FromRow, PgPool};
 
@@ -22,18 +25,20 @@ struct User {
     pub id: i32,
     pub username: String,
     pub password_hash: String,
-    // data: serde_json::Value,
+    data: serde_json::Value,
 }
 #[derive(Serialize)]
 struct UserResponse {
     pub id: i32,
     pub username: String,
+    data: serde_json::Value,
 }
 impl UserResponse {
     pub fn from_user(user: User) -> Self {
         UserResponse {
             id: user.id,
             username: user.username,
+            data: user.data,
         }
     }
 }
@@ -113,20 +118,22 @@ async fn create_user(state: &State<MyState>) -> Result<Json<UserResponse>, BadRe
         id: 1,
         username: "test".to_string(),
         password_hash,
-        /*   data: json!(Data {
+        // NOTE: Placeholder data
+        data: json!(Data {
             r#type: "root".to_string(),
             time: 1231212321,
             children: vec![],
             taskId: 1.to_string(),
             angle: None,
             length: None,
-        }),*/
+        }),
     });
     let user:User = sqlx::query_as(
-        "INSERT INTO users(username, password_hash) VALUES ($1,$2) RETURNING id, username, password_hash",
+        "INSERT INTO users(username, password_hash, data) VALUES ($1,$2,$3) RETURNING id, username, password_hash, data",
     )
     .bind(&user.username)
     .bind(&user.password_hash)
+    .bind(&user.data)
     .fetch_one(&state.0)
     .await
     .map_err(|e| BadRequest(Some(e.to_string())))?;
@@ -158,5 +165,6 @@ async fn rocket(#[shuttle_shared_db::Postgres] pool: PgPool) -> shuttle_service:
 
     Ok(rocket::build()
         .manage(state)
+        .attach(Cors)
         .mount("/", routes![index, create_user, get_user, login]))
 }
