@@ -72,9 +72,9 @@ async fn login(
 #[shuttle_service::main]
 async fn rocket(#[shuttle_shared_db::Postgres] pool: PgPool) -> shuttle_service::ShuttleRocket {
     // For testing purposes we reinit database on deployment
-    pool.execute(include_str!("../schema.sql"))
-        .await
-        .map_err(CustomError::new)?;
+    /*pool.execute(include_str!("../schema.sql"))
+    .await
+    .map_err(CustomError::new)?;*/
     let state = MyState(pool);
 
     Ok(rocket::build()

@@ -5,7 +5,7 @@ use sqlx::FromRow;
 use crate::{authentication::Claims, routes::user::UserResponse, MyState};
 
 #[derive(Serialize, Deserialize, FromRow)]
-struct Task {
+pub struct Task {
     id: i32,
     title: String,
     description: String,
@@ -13,17 +13,13 @@ struct Task {
 }
 
 #[get("/get_tasks")]
-pub async fn get_tasks(
-    state: &State<MyState>,
-    claims: Claims,
-) -> Result<Json<UserResponse>, BadRequest<String>> {
-    let user = sqlx::query_as("SELECT * FROM users WHERE username = $1")
-        .bind(claims.name)
-        .fetch_one(&state.0)
+pub async fn get_tasks(state: &State<MyState>) -> Result<Json<Vec<Task>>, BadRequest<String>> {
+    let tasks: Vec<Task> = sqlx::query_as("SELECT * FROM tasks")
+        .fetch_all(&state.0)
         .await
         .map_err(|e| BadRequest(Some(e.to_string())))?;
 
-    Ok(Json(UserResponse::from_user(user)))
+    Ok(Json(tasks))
 }
 
 #[post("/add_task", data = "<data>")]
