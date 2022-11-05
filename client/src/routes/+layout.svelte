@@ -1,10 +1,7 @@
 <script>
 	import { onMount } from "svelte";
 	import { goto } from "$app/navigation";
-
-	import Settings from "$lib/icons/Settings.svelte";
   import QuestionMark from "$lib/icons/QuestionMark.svelte";
-  
   import { userStore } from "$lib/stores/user";
 
   onMount(() => {
@@ -16,7 +13,6 @@
 
 <nav>
   <div>
-    <a href="/settings"><Settings /></a>
     <a href="questionnaire"><QuestionMark /></a>
   </div>
 
@@ -46,6 +42,10 @@
 
 <style lang="scss" global>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap');
+
+  * {
+    box-sizing: border-box;
+  }
   
   :root {
     --bg: #FFE2D1;

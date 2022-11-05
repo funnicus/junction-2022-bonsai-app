@@ -8,6 +8,7 @@
 	import type { TreeStore } from "$lib/stores/tree";
 	import { userStore } from "$lib/stores/user";
 	import { fly } from "svelte/transition";
+	import Button from "./Button.svelte";
 
     const treeState = getContext<TreeStore>('tree');
     const state = getContext<Writable<{state: number; isLeaf: number}>>('menuState');
@@ -17,7 +18,6 @@
 
     onMount( async () => {
         tasks = await fetch("https://bonsai-health.shuttleapp.rs/tasks/get_tasks").then(d => d.json());
-        console.log("tasks", tasks);
     });
 
     function handleOptionSelection(selection: Task){
@@ -31,7 +31,6 @@
 
     function handleBackClick(){
         if($state.state === 0){
-            console.log("Closing menu");
             treeState.setSelectedNode(null)
 
         }
@@ -100,12 +99,11 @@
                 <input type="range" min="20" max="75" bind:value={$tree.previewLength} />
             </label>
             {/if}
-            
-
         </div>
 
-        <button class="button" on:click={handleOptionCompletion}> <b> Confirm </b> </button>
-
+        <Button type="button" style="margin-top: auto" onClick={handleOptionCompletion}>
+            <b>Confirm</b>
+        </Button>
     {/if}  
 
     {#if $state.state !== 0 && $state.state !== 3}
@@ -120,7 +118,7 @@
             <b>What do you want to do?<b>
         </div>
 
-        {#each tasks.slice(0,2) as task }
+        {#each tasks.slice(0,4) as task }
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <div class="menuItem" on:click={() => handleOptionSelection(task)}>{task.title}</div>
         {/each}
@@ -133,7 +131,7 @@
 
         <div class="menuItemDescription">{selectedOption.description}</div>
 
-        <button class="button" on:click={handleOptionCompletion}> <b>Start</b> </button>
+        <Button type="button" style="margin-top: auto;" onClick={handleOptionCompletion}>Start</Button>
     {/if}
 
     {#if $state.state === 3}
@@ -144,9 +142,9 @@
         </div>
 
         <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div class="checkMark" on:click={resetState}>
+        <Button type="button" onClick={resetState}>
             Mark as done <Check />
-        </div>
+        </Button>
     {/if}
 </div>
 {/if}
@@ -155,9 +153,9 @@
   .menuContainer {
     color: rgb(161, 80, 34);
     width: 400px;
-    min-height: 300px;
+    height: 350px;
     max-width: calc(100vw - 2rem);
-    padding: 15px 30px;
+    padding: 16px;
     display: flex;
     flex-flow: column;
     border-radius: 20px;
@@ -209,21 +207,7 @@
     transform: scale(1.25);
   }
 
-  .button {
-    margin-top: auto;
-    color: rgb(161, 80, 34);
-    width: fit-content;
-    padding: 10px;
-    align-self: center;
-    border-radius: 5px;
-    border: none;
-    background: rgba(161, 80, 34, .15);
-    transition: 0.3s;
-  }
-  button:hover {
-    cursor: pointer;
-    transform: scale(1.15);
-  }
+ 
 
   .checkMark {
     color: rgb(161, 80, 34);
