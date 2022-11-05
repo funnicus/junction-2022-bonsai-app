@@ -17,7 +17,6 @@
 
     onMount( async () => {
         tasks = await fetch("https://bonsai-health.shuttleapp.rs/tasks/get_tasks").then(d => d.json());
-        console.log("tasks", tasks);
     });
 
     function handleOptionSelection(selection: Task){
