@@ -1,9 +1,9 @@
 <script lang="ts">
-    import type { MenuContent, MenuItem } from "$lib/menuTypes";
+    import type { Task } from "$lib/menuTypes";
     import ArrowLeft from "$lib/icons/ArrowLeft.svelte";
 	import CloseIcon from "$lib/icons/CloseIcon.svelte";
 	import Check from "$lib/icons/Check.svelte";
-	import { getContext } from "svelte";
+	import { getContext, onMount } from "svelte";
 	import type { Writable } from "svelte/store";
 	import type { TreeStore } from "$lib/stores/tree";
 	import { userStore } from "$lib/stores/user";
@@ -12,25 +12,16 @@
     const treeState = getContext<TreeStore>('tree');
     const state = getContext<Writable<{state: number; isLeaf: number}>>('menuState');
     const tree = getContext<TreeStore>('tree');
-    let selectedOption: MenuItem;
+    let tasks: Task[] = [];
+    let selectedOption: Task;
 
-    const menuContent: MenuContent = {
-        title: "What would you like to do?",
-        options: [{
-            title: "Brush your teeth",
-            description: "Do something other than just laying in bed - keeping hygiene levels high improves both mental and physical health"
-        },{
-            title: "Take out the trash",
-            description: "Do something other than just laying in bed - keeping the house clean improves both mental and physical health"
-        },{
-            title: "Call a friend",
-            description: "Do something other than just laying in bed - calling a friend is always fun!"
-        }]
-    }
+    onMount( async () => {
+        tasks = await fetch("https://bonsai-health.shuttleapp.rs/tasks/get_tasks").then(d => d.json());
+        console.log("tasks", tasks);
+    });
 
-    function handleOptionSelection(selection: MenuItem){
+    function handleOptionSelection(selection: Task){
         selectedOption = selection;
-        console.log(`Switching state from ${$state.state} to ${$state.state + 1}`)
         if($state.state < 0){
             $state.state = 1;
         }else{
@@ -44,12 +35,10 @@
             treeState.setSelectedNode(null)
 
         }
-        console.log(`Switching state from ${$state.state} to ${$state.state - 1}`)
         $state.state--;
     }
 
     function handleOptionCompletion(){
-        console.log(`Switching state from ${$state.state} to ${$state.state + 1}`)
         $state.state++;
     }
 
@@ -75,11 +64,6 @@
                 nodes: $tree.nodes,
             }),
         })
-    }
-
-
-    function onSubmit() {
-        console.log($userStore);
     }
 </script>
 
@@ -133,12 +117,12 @@
 
     {#if $state.state === 1}
         <div class="title">
-            <b>{menuContent.title}</b>
+            <b>What do you want to do?<b>
         </div>
 
-        {#each menuContent.options as m }
+        {#each tasks.slice(0,2) as task }
             <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <div class="menuItem" on:click={() => handleOptionSelection(m)}>{m.title}</div>
+            <div class="menuItem" on:click={() => handleOptionSelection(task)}>{task.title}</div>
         {/each}
     {/if}    
     
@@ -254,11 +238,12 @@
     border: none;
     background: rgba(161, 80, 34, .15);
     transition: 0.3s;
+    transform: scale(0.8);
   }
 
   .checkMark:hover {
     cursor: pointer;
-    transform: scale(1.15);
+    transform: scale(1);
   }
 
   .slider {
