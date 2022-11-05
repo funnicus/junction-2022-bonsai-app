@@ -5,6 +5,8 @@
 	import { onMount, setContext } from "svelte";
 	import type { Data } from "$lib/dataSchema";
 	import { createMenuStore } from "$lib/stores/menu";
+	import { userStore } from "$lib/stores/user";
+	import { goto } from "$app/navigation";
 
   export let tree: Data[];
 
@@ -30,7 +32,22 @@
   setContext('tree', treeStore);
 
   onMount(() => {
-    fetch("https://bonsai-health.shuttleapp.rs/").then((data) => console.log(data))
+    //if(!window.localStorage.getItem("token") && window.location.href !== "/login") goto("/login");
+  })
+
+  onMount(async () => {
+    const user = await fetch("https://bonsai-health.shuttleapp.rs/user/data", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + window.localStorage.getItem("token")
+      },
+    }).then((res) => res.json()).catch(() => goto("/"));
+
+    if(user.data) {
+      treeStore.setNodes(user.data.nodes)
+    }
+    
   })
 
 </script>

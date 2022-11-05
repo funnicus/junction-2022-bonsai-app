@@ -1,11 +1,30 @@
 <script lang="ts">
 	import Button from "$lib/components/Button.svelte";
   import { goto } from "$app/navigation";
-  import QuestionSlider from "$lib/components/QuestionSlider.svelte";
+  import Slider from "$lib/components/Slider.svelte";
+	import { userStore } from "$lib/stores/user";
 
-  let physicalActivity = 0;
+  let physicalActivity = 5;
+  let socialRelations = 5;
+  let hobbies = 5;
+  let workLifeBalance = 5;
 
-  function onSubmit(e: SubmitEvent) {
+  async function onSubmit() {
+    await fetch("https://bonsai-health.shuttleapp.rs/user/edit_quiz", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + $userStore
+      },
+      body: JSON.stringify({
+        physicalActivity,
+        socialRelations,
+        hobbies,
+        workLifeBalance,
+      }),
+    })
+
+    goto("/");
   }
 
 
@@ -17,13 +36,13 @@
   </p>
 
   <form class="questions-form" method="POST" on:submit|preventDefault={onSubmit}>
-    <QuestionSlider label={"Physical Activity"} bind:value={physicalActivity} />
+    <Slider label={"Physical Activity"} bind:value={physicalActivity} />
 
-    <QuestionSlider label={"Social Relations"} />
+    <Slider label={"Social Relations"} bind:value={socialRelations} />
 
-    <QuestionSlider label={"Hobbies"} />
+    <Slider label={"Hobbies"} bind:value={hobbies} />
 
-    <QuestionSlider label={"Work/Life balance"} />
+    <Slider label={"Work/Life balance"} bind:value={workLifeBalance}/>
 
     <Button style={"font-size: 2em; margin-top: 50px;"} type={"submit"} >
       Confirm

@@ -9,7 +9,7 @@ import { userStore } from "$lib/stores/user";
   const handleLogin = async (e: any) => {
     e.preventDefault();
 
-    const data = await fetch("https://bonsai-health.shuttleapp.rs/login", {
+    const data = await fetch("https://bonsai-health.shuttleapp.rs/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -40,7 +40,7 @@ import { userStore } from "$lib/stores/user";
   </label>
 
   <Button type="submit" onClick={handleLogin}>
-    Log In
+    Register
   </Button>
 </form>
 

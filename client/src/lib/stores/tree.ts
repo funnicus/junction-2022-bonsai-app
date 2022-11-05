@@ -16,6 +16,7 @@ export type TreeStore = Writable<TreeState> & {
 	setSelectedNode: (node: Data | null) => void;
 	toggleLeaves: (show: boolean) => void;
 	removeNode: (node: Data) => void;
+	setNodes: (nodes: Data[]) => void;
 };
 
 export const createTreeStore = (): TreeStore => {
@@ -113,6 +114,13 @@ export const createTreeStore = (): TreeStore => {
 		});
 	};
 
+	const setNodes = (nodes: Data[]) => {
+		state.update((prev) => {
+			prev.nodes[0].children = nodes;
+			return prev;
+		});
+	};
+
 	return {
 		subscribe: state.subscribe,
 		set: state.set,
@@ -121,6 +129,7 @@ export const createTreeStore = (): TreeStore => {
 		addExtension,
 		setSelectedNode,
 		toggleLeaves,
-		removeNode
+		removeNode,
+		setNodes
 	};
 };

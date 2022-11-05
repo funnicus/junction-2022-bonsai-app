@@ -1,6 +1,16 @@
 <script>
-	import QuestionMark from "$lib/icons/QuestionMark.svelte";
-import Settings from "$lib/icons/Settings.svelte";
+	import { onMount } from "svelte";
+	import { goto } from "$app/navigation";
+  
+	import Settings from "$lib/icons/Settings.svelte";
+  import QuestionMark from "$lib/icons/QuestionMark.svelte";
+  
+  import { userStore } from "$lib/stores/user";
+
+  onMount(() => {
+    $userStore = window.localStorage.getItem("token") || "";
+  });
+
 </script>
 
 
