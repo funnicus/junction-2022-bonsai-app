@@ -2,13 +2,18 @@
 	import Tree from "$lib/components/Tree.svelte";
 	import type { Data } from "$lib/dataSchema";
 	import { createTreeStore } from "$lib/stores/tree";
+	import { onMount } from "svelte";
 
   let tree = createTreeStore()
 
   let angle = 0
   let length = 50
 
-  $:console.log(tree)
+  //$:console.log(tree)
+
+  onMount(() => {
+    fetch("https://bonsai-health.shuttleapp.rs/").then((data) => console.log(data))
+  })
 
 </script>
 <h1>Welcome to SvelteKit</h1>
