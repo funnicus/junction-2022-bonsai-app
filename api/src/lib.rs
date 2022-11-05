@@ -5,6 +5,7 @@ use rocket::response::status::BadRequest;
 use rocket::serde::json::Json;
 use rocket::State;
 use serde::{Deserialize, Serialize};
+use serde_json::json;
 use shuttle_service::error::CustomError;
 use sqlx::{Executor, FromRow, PgPool};
 
@@ -14,6 +15,16 @@ struct MyState(PgPool);
 struct User {
     pub id: i32,
     pub username: String,
+    data: serde_json::Value,
+}
+#[derive(Serialize, Deserialize)]
+struct Data {
+    r#type: String,
+    time: i32,
+    children: Vec<Data>,
+    taskId: String,
+    angle: Option<i32>,
+    length: Option<i32>,
 }
 
 #[get("/")]
@@ -26,6 +37,14 @@ async fn create_user(state: &State<MyState>) -> Result<Json<User>, BadRequest<St
     let user = Json(User {
         id: 1,
         username: "test".to_string(),
+        data: json!(Data {
+            r#type: "root".to_string(),
+            time: 1231212321,
+            children: vec![],
+            taskId: 1.to_string(),
+            angle: None,
+            length: None,
+        }),
     });
     let user = sqlx::query_as("INSERT INTO users(username) VALUES ($1) RETURNING id, username")
         .bind(&user.username)
@@ -48,7 +67,6 @@ async fn get_user(state: &State<MyState>, id: &str) -> Result<Json<User>, BadReq
 
 #[shuttle_service::main]
 async fn rocket(#[shuttle_shared_db::Postgres] pool: PgPool) -> shuttle_service::ShuttleRocket {
-
     // For testing purposes we reinit database on deployment
     pool.execute(include_str!("../schema.sql"))
         .await
