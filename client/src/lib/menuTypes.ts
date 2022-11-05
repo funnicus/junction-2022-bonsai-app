@@ -1,9 +1,5 @@
-export type MenuContent = {
+export type Task = {
     title: string,
-    options: MenuItem[]
-};
-
-export type MenuItem = {
-    title: string,
-    description: string
+    description: string,
+    category: string
 }
