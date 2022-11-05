@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from "svelte";
 	import { goto } from "$app/navigation";
-  
+
 	import Settings from "$lib/icons/Settings.svelte";
   import QuestionMark from "$lib/icons/QuestionMark.svelte";
   
@@ -15,8 +15,28 @@
 
 
 <nav>
-  <a href="/settings"><Settings /></a>
-  <a href="questionnaire"><QuestionMark /></a>
+  <div>
+    <a href="/settings"><Settings /></a>
+    <a href="questionnaire"><QuestionMark /></a>
+  </div>
+
+  {#if $userStore}
+    <span>Logged in as <b>{"user"}</b></span>
+  {/if}
+
+  <div>
+    {#if $userStore}
+      <button class="logging-btn" on:click={() => {
+          window.localStorage.removeItem("token")
+          window.localStorage.removeItem("tree")
+          $userStore = ""
+          goto("/login")
+        }
+      }>Logout</button>
+    {:else}
+      <a href="/login">Login</a>
+    {/if}
+  </div>
 </nav>
 
 <main>
@@ -42,15 +62,32 @@
   nav {
     margin: 16px;
 
+    position: relative;
+    z-index: 3;
+
+    display: flex;
+    justify-content: space-between;
     a {
     color: #A15022;
   }
   }
 
+  .logging-btn {
+    background: none;
+    border: none;
+    color: var(--brown);
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
 
+  .logging-btn:hover {
+    text-decoration: underline;
+  }
 
   body {
     margin: 0;
     height: 100%;
+    border: 1px solid transparent; // try to guess why this is here :)
   }
 </style>

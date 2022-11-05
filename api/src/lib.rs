@@ -15,8 +15,7 @@ use rocket::serde::json::Json;
 use rocket::State;
 use routes::user::User;
 use serde::{Deserialize, Serialize};
-use shuttle_service::error::CustomError;
-use sqlx::{Executor, PgPool};
+use sqlx::PgPool;
 
 pub struct MyState(PgPool);
 
@@ -29,6 +28,7 @@ struct LoginRequest {
 #[derive(Serialize)]
 struct LoginResponse {
     token: String,
+    username: String,
 }
 
 #[get("/")]
@@ -61,6 +61,7 @@ async fn login(
             token: claim
                 .into_token()
                 .map_err(|error| Unauthorized(Some(error.1)))?,
+            username: login.username.clone(),
         };
 
         Ok(Json(response))
