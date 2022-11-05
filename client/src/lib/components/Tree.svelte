@@ -24,5 +24,6 @@
   svg {
     overflow: visible;
     margin: auto;
+    width: 100%;
   }
 </style>

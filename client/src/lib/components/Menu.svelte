@@ -77,10 +77,8 @@
             <b>How do you want to grow your Bonsai?</b>
         </div>
         <div style="display: flex; flex-direction: column; justify-content: space-evenly;">
-            
-            
             <div style="display: flex; margin-top: .5rem; margin-bottom: .5rem;">
-                <label style="margin-left: 10px">
+                <label>
                     <input type=radio bind:group={$state.isLeaf} value={0} /> Branch
                 </label>
     
@@ -156,7 +154,8 @@
     color: rgb(161, 80, 34);
     width: 400px;
     min-height: 300px;
-    padding: 15px;
+    max-width: calc(100vw - 2rem);
+    padding: 15px 30px;
     display: flex;
     flex-flow: column;
     border-radius: 20px;
@@ -248,9 +247,8 @@
     display: flex;
     flex-direction: column;
     align-content: space-around;
-    margin: 10px;
-    /* Kovakoodasin tän, whatchu gonna do??? */
-    min-width: 351px;
+    margin: 10px 0;
+    width: 100%;
     align-self: center;
     background: rgba(161, 80, 34, .15);
     border-radius: 5px;
