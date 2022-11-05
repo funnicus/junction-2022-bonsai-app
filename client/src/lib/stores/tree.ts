@@ -109,7 +109,7 @@ export const createTreeStore = (): TreeStore => {
 
 	const removeNode = (nodeToDelete: Data) => {
 		state.update((prev) => {
-			console.log(recursiveDelete(prev.nodes, nodeToDelete));
+			recursiveDelete(prev.nodes, nodeToDelete);
 			return prev;
 		});
 	};
