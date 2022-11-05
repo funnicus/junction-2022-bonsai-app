@@ -5,6 +5,7 @@
 	import type { Data } from "../dataSchema";
 	import Leaf from "./Leaf.svelte";
 
+  export let index: number;
   export let node: Data
   export let depth: number
   export let width: number;
@@ -19,16 +20,17 @@
   const x2 = -Math.sin(degToRad(node?.angle)) * (node?.length ?? 0)
   const y2 = Math.cos(degToRad(node?.angle)) * (node?.length ?? 0)
 
-  const currentWidth = width - (depth*1.5);
+  const currentWidth = Math.max(width - (depth*1.5), 3);
 
   const dispatch = createEventDispatcher();
 </script>
 
-<g in:scale={{start: 0, duration: 500, opacity: 1}}>
+<g in:scale={{start: 0, duration: 1500, opacity: 1, delay: (depth + (index * 2)) * 250}}>
   {#if node.type === "extension"}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <polygon
-      on:click={() => dispatch('select', node)}
+      on:click={() => dispatch('select', selected ? null : node)}
+      class:selected
       points="
         {-currentWidth/2},0
         {-((currentWidth/2)-0.5)},{node.length}
@@ -36,8 +38,6 @@
         {currentWidth/2},0
         0, -5"
       fill="#834A4A"
-      stroke="{selected ? "red" : ""}"
-      stroke-width={2}
       transform="rotate({node.angle})"
       stroke-linejoin="round"
     />
@@ -50,7 +50,7 @@
           x2={-Math.sin(degToRad(angle)) * ((length-4) ?? 0)}
           y2={Math.cos(degToRad(angle)) * ((length-4) ?? 0)}
           stroke-dasharray="4"
-          stroke="#834A4A"
+          stroke="blue"
           stroke-width={3}
         />
 
@@ -58,14 +58,14 @@
           cx={-Math.sin(degToRad(angle)) * (length ?? 0)}
           cy={Math.cos(degToRad(angle)) * (length ?? 0)}
           r="5"
-          stroke="#834A4A"
+          stroke="blue"
           fill="transparent"
           stroke-width={2}
         />
 
       {/if}
 
-      {#each node.children as child}
+      {#each node.children as child, i}
         <svelte:self
           node={child}
           depth={depth + 1}
@@ -74,6 +74,7 @@
           on:select
           {angle}
           {length}
+          index={i}
         />
       {/each}
     </g>
@@ -81,3 +82,18 @@
     <Leaf depth={depth + 1} {width} on:click={() => dispatch('select', node)} />
   {/if}
 </g>
+
+
+<style>
+  polygon {
+    stroke: transparent;
+    stroke-width: 0;
+    transition: stroke 200ms, stroke-width 200ms;
+  }
+
+  polygon.selected {
+    stroke: red;
+    stroke-width: 2;
+
+  }
+</style>

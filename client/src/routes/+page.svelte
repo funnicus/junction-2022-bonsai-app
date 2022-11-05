@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Tree from "$lib/components/Tree.svelte";
-	import type { Data } from "$lib/dataSchema";
 	import { createTreeStore } from "$lib/stores/tree";
     import Menu from "$lib/components/Menu.svelte";
 
@@ -9,7 +8,7 @@
   let angle = 0
   let length = 50
 
-  $:console.log(tree)
+  $:console.log($tree.nodes)
 
 </script>
 <h1>Welcome to SvelteKit</h1>
