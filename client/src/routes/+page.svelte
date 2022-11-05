@@ -35,14 +35,9 @@
 
 </script>
 
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
-
-<a href="/bonsai">To 🅱️ONSAI</a>
-
 <svelte:window on:keydown={handleKeyDown} on:keyup={handleKeyUp} /> 
 
-<div>
+<div class="tree-view">
   <Tree
     nodes={$tree.nodes}
     on:select={e => tree.setSelectedNode(e.detail)}
@@ -73,6 +68,10 @@
   label {
     display: flex;
     flex-direction: column;
+  }
+
+  .tree-view {
+    display: flex;
   }
 </style>
 

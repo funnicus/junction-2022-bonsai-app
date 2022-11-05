@@ -26,6 +26,6 @@
 <style>
   svg {
     overflow: visible;
-    border: 1px solid red;
+    margin: auto;
   }
 </style>
