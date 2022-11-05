@@ -10,9 +10,9 @@ use crate::routes::user::{complete_task, create_user, edit_tree, get_user};
 use argon2::{Argon2, PasswordHash, PasswordVerifier};
 use authentication::Claims;
 use cors::Cors;
+use rocket::response::status::Unauthorized;
 use rocket::serde::json::Json;
 use rocket::State;
-use rocket::{http::Status, response::status::Unauthorized};
 use routes::user::User;
 use serde::{Deserialize, Serialize};
 use shuttle_service::error::CustomError;
@@ -77,17 +77,10 @@ async fn rocket(#[shuttle_shared_db::Postgres] pool: PgPool) -> shuttle_service:
         .map_err(CustomError::new)?;
     let state = MyState(pool);
 
-    Ok(rocket::build().manage(state).attach(Cors).mount(
-        "/",
-        routes![
-            index,
-            create_user,
-            get_user,
-            login,
-            edit_tree,
-            complete_task,
-            get_tasks,
-            add_task
-        ],
-    ))
+    Ok(rocket::build()
+        .manage(state)
+        .attach(Cors)
+        .mount("/", routes![index, create_user, login])
+        .mount("/user", routes![get_user, complete_task, edit_tree])
+        .mount("/tasks", routes![get_tasks, add_task]))
 }
