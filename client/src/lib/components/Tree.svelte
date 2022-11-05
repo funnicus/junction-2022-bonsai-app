@@ -1,20 +1,20 @@
 <script lang="ts">
-	import type { Data } from "../dataSchema";
+	import type { TreeStore } from "$lib/stores/tree";
+	import { setContext } from "svelte";
 	import TreeNode from "./TreeNode.svelte";
 	import Vase from "./Vase.svelte";
   
-  export let nodes: Data[]
-  export let selectedNode: Data | null
+  export let store: TreeStore;
 
-  // used for preview
-  export let angle: number;
-  export let length: number;
+  const INITIAL_WIDTH = 15;
+
+  setContext('tree', store);
 </script>
 
 <svg viewBox="0 0 500 500" width="500">
   <g transform="translate(250 400) rotate(180)">
-    {#each nodes as n, i (n.time)}
-      <TreeNode node={n} depth={1} width={15} {selectedNode} on:select {angle} {length} index={i} />
+    {#each $store.nodes as n (n.time)}
+      <TreeNode node={n} depth={1} width={INITIAL_WIDTH} />
     {/each}
   </g>
 
@@ -26,6 +26,6 @@
 <style>
   svg {
     overflow: visible;
-    border: 1px solid red;
+    margin: auto;
   }
 </style>

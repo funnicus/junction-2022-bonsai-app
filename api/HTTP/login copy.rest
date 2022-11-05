@@ -1,0 +1,8 @@
+POST https://bonsai-health.shuttleapp.rs/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "test",
+    "password": "test"
+}
+// NOTE: This credentials are here for testing purposes
