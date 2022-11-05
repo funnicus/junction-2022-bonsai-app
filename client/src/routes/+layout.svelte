@@ -6,6 +6,7 @@
   import QuestionMark from "$lib/icons/QuestionMark.svelte";
   
   import { userStore } from "$lib/stores/user";
+	import ToolTips from "$lib/components/ToolTips.svelte";
 
   onMount(() => {
     $userStore = window.localStorage.getItem("token") || "";
@@ -21,7 +22,7 @@
   </div>
 
   {#if $userStore}
-    <span>Logged in as <b>{"user"}</b></span>
+    <span>Logged in as <b>{window.localStorage.getItem("username")}</b></span>
   {/if}
 
   <div>
@@ -38,6 +39,8 @@
     {/if}
   </div>
 </nav>
+
+<ToolTips />
 
 <main>
   <slot></slot>

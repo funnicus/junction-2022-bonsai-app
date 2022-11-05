@@ -23,6 +23,7 @@ import { userStore } from "$lib/stores/user";
     $userStore = await data.token;
 
     window.localStorage.setItem("token", $userStore);
+    window.localStorage.setItem("username", data.username);
 
     goto("/");
   }
