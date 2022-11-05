@@ -29,9 +29,9 @@ pub async fn add_task(
     let _user: Task = sqlx::query_as(
         "INSERT INTO tasks(title, description, category) VALUES ($1,$2,$3) RETURNING title, description, category",
     )
-    .bind(data.0.get("title").unwrap())
-    .bind(data.0.get("description").unwrap())
-    .bind(data.0.get("category").unwrap())
+    .bind(data.0.get("title").unwrap().as_str())
+    .bind(data.0.get("description").unwrap().as_str())
+    .bind(data.0.get("category").unwrap().as_str())
     .fetch_one(&state.0)
     .await
     .map_err(|e| BadRequest(Some(e.to_string())))?;

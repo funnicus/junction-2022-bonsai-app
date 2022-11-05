@@ -17,7 +17,7 @@
   </div>
 
   {#if $userStore}
-    <span>Logged in as <b>{"user"}</b></span>
+    <span>Logged in as <b>{window.localStorage.getItem("username")}</b></span>
   {/if}
 
   <div>

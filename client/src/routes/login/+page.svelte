@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import Button from "$lib/components/Button.svelte";
-import { userStore } from "$lib/stores/user";
+	import LoginRegister from "$lib/components/LoginRegister.svelte";
+  import { userStore } from "$lib/stores/user";
 
   let username = "";
   let password = "";
@@ -23,26 +23,20 @@ import { userStore } from "$lib/stores/user";
     $userStore = await data.token;
 
     window.localStorage.setItem("token", $userStore);
+    window.localStorage.setItem("username", data.username);
 
     goto("/");
   }
 </script>
 
-<form on:submit={handleLogin}>
-  <label>
-    Username
-    <input type="text" placeholder="username" bind:value={username} />
-  </label>
-
-  <label>
-    Password
-    <input type="password" bind:value={password} />
-  </label>
-
-  <Button type="submit" onClick={handleLogin}>
-    Log In
-  </Button>
-</form>
+<LoginRegister 
+  handleSubmit={handleLogin} 
+  linkHref={"/register"} 
+  linkText={"Don't have an account yet? Register here"} 
+  buttonText={"Login"} 
+  bind:username={username}
+  bind:password={password}
+/>
 
 <style>
   form {
@@ -50,6 +44,11 @@ import { userStore } from "$lib/stores/user";
     margin: 0 auto;
     margin-top: 5rem;
   
+  }
+
+  .form-footer {
+    display: flex;
+    justify-content: space-between;
   }
 
   label {
