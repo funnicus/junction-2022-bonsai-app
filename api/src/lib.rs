@@ -26,7 +26,7 @@ struct LoginRequest {
 }
 
 #[derive(Serialize)]
-struct LoginResponse {
+pub struct LoginResponse {
     token: String,
     username: String,
 }
