@@ -1,8 +1,14 @@
 <script lang="ts">
     import type { MenuContent, MenuItem } from "$lib/menuTypes";
-    import ArrowLeft from "$lib/assets/ArrowLeft.svelte";
+    import ArrowLeft from "$lib/icons/ArrowLeft.svelte";
+	import CloseIcon from "$lib/icons/CloseIcon.svelte";
+	import Check from "$lib/icons/Check.svelte";
+	import { getContext } from "svelte";
+	import type { Writable } from "svelte/store";
+	import type { TreeStore } from "$lib/stores/tree";
 
-    let state = 0;
+    const treeState = getContext<TreeStore>('tree');
+    const state = getContext<Writable<{state: number}>>('menuState');
     let selectedOption: MenuItem;
 
     const menuContent: MenuContent = {
@@ -21,77 +27,96 @@
 
     function handleOptionSelection(selection: MenuItem){
         selectedOption = selection;
-        console.log(`Switching state from ${state} to ${state + 1}`)
-        if(state < 0){
-            state = 1;
+        console.log(`Switching state from ${$state.state} to ${$state.state + 1}`)
+        if($state.state < 0){
+            $state.state = 1;
         }else{
-            state++;
+            $state.state++;
         }
     }
 
     function handleBackClick(){
-        if(state === 0){
-            console.log("Closing menu")
+        if($state.state === 0){
+            console.log("Closing menu");
+            treeState.setSelectedNode(null)
+
         }
-        console.log(`Switching state from ${state} to ${state - 1}`)
-        state--;
+        console.log(`Switching state from ${$state.state} to ${$state.state - 1}`)
+        $state.state--;
+    }
+
+    function handleOptionCompletion(){
+        console.log(`Switching state from ${$state.state} to ${$state.state + 1}`)
+        $state.state++;
+    }
+
+    function resetState(){
+        // Menu is hidden
+        $state.state = -1;
     }
 </script>
 
-{#if state >= 0}
+{#if $state.state >= 0}
 <div class="menuContainer">
+
+    {#if $state.state !== 0 && $state.state !== 2}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="backIcon" on:click={handleBackClick}>
-            <ArrowLeft type="right-arrow"  />
+            <ArrowLeft />
         </div>
-        
+    {/if}
 
-        {#if state === 0}
-            <div class="title">
-                <b>{menuContent.title}</b>
-            </div>
+    {#if $state.state === 0}
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <div class="backIcon" on:click={handleBackClick}>
+            <CloseIcon />
+        </div>
 
-            {#each menuContent.options as m }
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <div class="menuItem" on:click={() => handleOptionSelection(m)}>{m.title}</div>
-            {/each}
-        {/if}    
-        
-        {#if state === 1}
-            <div class="title">
-                <b>{selectedOption.title}</b>
-            </div>
+        <div class="title">
+            <b>{menuContent.title}</b>
+        </div>
 
-            <div class="menuItemDescription">{selectedOption.description}</div>
+        {#each menuContent.options as m }
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <div class="menuItem" on:click={() => handleOptionSelection(m)}>{m.title}</div>
+        {/each}
+    {/if}    
+    
+    {#if $state.state === 1}
+        <div class="title">
+            <b>{selectedOption.title}</b>
+        </div>
 
-            <button class="button" > <b> Start </b> </button>
-        {/if}
+        <div class="menuItemDescription">{selectedOption.description}</div>
 
-        {#if state === 2}
-            <div class="title">
-                <b>{selectedOption.title}</b>
-            </div>
+        <button class="button" on:click={handleOptionCompletion}> <b> Mark as complete </b> </button>
+    {/if}
 
-            <button class="button"> <b> Mark as complete </b> </button>
-        {/if}
+    {#if $state.state === 2}
+        <div class="title">
+            <b>
+                <i>{selectedOption.title}</i> complete!
+            </b>
+        </div>
+
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <div class="checkMark" on:click={resetState}>
+            <Check />
+        </div>
+    {/if}
 </div>
 {/if}
 
-
-
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200&display=swap');
-
   .menuContainer {
+    border: 2px solid rgb(161, 80, 34);
     color: rgb(161, 80, 34);
     width: 400px;
-    font-family: 'Inter', sans-serif;
+    min-height: 300px;
     padding: 15px;
     display: flex;
     flex-flow: column;
-    /* align-items: center; */
     border-radius: 20px;
-    /* background: linear-gradient(to bottom, rgba(0,0,0,0), #FFE2D1 25%); */
     box-shadow: 0px 2px 10px 0px grey;
 }
 
@@ -128,10 +153,10 @@
   .backIcon:hover {
     cursor: pointer;
     transform: scale(1.25);
-    transform: rotate(-360deg);
   }
 
   .button {
+    margin-top: auto;
     color: rgb(161, 80, 34);
     width: fit-content;
     padding: 10px;
@@ -143,7 +168,24 @@
   }
   button:hover {
     cursor: pointer;
+    transform: scale(1.15);
+  }
+
+  .checkMark {
+    margin-top: auto;
+    color: rgb(161, 80, 34);
+    width: fit-content;
+    padding: 10px;
+    align-self: center;
+    justify-self: end;
+    border-radius: 5px;
+    border: none;
     background: rgba(161, 80, 34, .15);
+    transition: 0.3s;
+  }
+
+  .checkMark:hover {
+    cursor: pointer;
     transform: scale(1.15);
   }
 

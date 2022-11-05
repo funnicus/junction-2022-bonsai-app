@@ -15,7 +15,7 @@ export type TreeStore = Writable<TreeState> & {
 	addExtension: (angle: number, length: number) => void;
 	setSelectedNode: (node: Data | null) => void;
 	toggleLeaves: (show: boolean) => void;
-	setPreviewData: (angle: number, length: number) => void
+	removeNode: (node: Data) => void;
 };
 
 export const createTreeStore = (): TreeStore => {
@@ -24,13 +24,22 @@ export const createTreeStore = (): TreeStore => {
 		previewLength: 20,
 		selectedNode: null,
 		showLeaves: true,
-		nodes: []
+		nodes: [
+			{
+				type: 'extension',
+				time: Date.now(),
+				taskId: '',
+				length: 30,
+				angle: 4,
+				children: []
+			}
+		]
 	});
 
-	// load tree after 1 ms, giving it a starting animation
-	setTimeout(() => {
-		state.update((prev) => ({ ...prev, nodes: treeData as any }));
-	}, 1);
+	// // load tree after 1 ms, giving it a starting animation
+	// setTimeout(() => {
+	// 	state.update((prev) => ({ ...prev, nodes: treeData as any }));
+	// }, 1);
 
 	const addLeaf = () => {
 		const item: Data = {
@@ -80,8 +89,29 @@ export const createTreeStore = (): TreeStore => {
 	};
 
 	const setPreviewData = (angle: number, length: number) => {
-		state.update(prev => ({...prev, previewAngle: angle, previewLength: length }))
-	}
+		state.update((prev) => ({ ...prev, previewAngle: angle, previewLength: length }));
+	};
+
+	const recursiveDelete = (nodes: Data[], nodeToDelete: Data): boolean => {
+		for (const node of nodes) {
+			if (node === nodeToDelete) {
+				nodes.splice(nodes.indexOf(node), 1);
+				return true;
+			}
+
+			const found = recursiveDelete(node.children, nodeToDelete);
+			if (found) return found;
+		}
+
+		return false;
+	};
+
+	const removeNode = (nodeToDelete: Data) => {
+		state.update((prev) => {
+			console.log(recursiveDelete(prev.nodes, nodeToDelete));
+			return prev;
+		});
+	};
 
 	return {
 		subscribe: state.subscribe,
@@ -91,6 +121,6 @@ export const createTreeStore = (): TreeStore => {
 		addExtension,
 		setSelectedNode,
 		toggleLeaves,
-		setPreviewData
+		removeNode
 	};
 };

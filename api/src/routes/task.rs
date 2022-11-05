@@ -1,7 +1,3 @@
-use argon2::{
-    password_hash::{rand_core::OsRng, SaltString},
-    Argon2, PasswordHasher,
-};
 use rocket::{http::Status, response::status::BadRequest, serde::json::Json, State};
 use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
@@ -15,7 +11,7 @@ struct Task {
     description: String,
 }
 
-#[get("/tasks")]
+#[get("/get_tasks")]
 pub async fn get_tasks(
     state: &State<MyState>,
     claims: Claims,
@@ -29,7 +25,7 @@ pub async fn get_tasks(
     Ok(Json(UserResponse::from_user(user)))
 }
 
-#[post("/task/add_task", data = "<data>")]
+#[post("/add_task", data = "<data>")]
 pub async fn add_task(
     state: &State<MyState>,
     data: Json<serde_json::Value>,

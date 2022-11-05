@@ -2,6 +2,7 @@
 	import type { TreeStore } from "$lib/stores/tree";
 	import { degToRad } from "$lib/utils/number";
 	import { createEventDispatcher, getContext } from "svelte";
+	import type { Writable } from "svelte/store";
 	import { scale } from "svelte/transition";
 	import type { Data } from "../dataSchema";
 	import Leaf from "./Leaf.svelte";
@@ -11,6 +12,9 @@
   export let width: number;
 
   const tree = getContext<TreeStore>('tree')
+  const showMenu  = getContext<Writable<{state: number}>>('menuState');
+
+
 
   $: selected = $tree.selectedNode === node
 
@@ -18,6 +22,17 @@
   const y2 = Math.cos(degToRad(node?.angle)) * (node?.length ?? 0)
 
   const currentWidth = Math.max(width - (depth*1.5), 3);
+
+  function handleOnClick(){
+
+    if (!selected) {
+      $showMenu.state = 0;
+      tree.setSelectedNode(node)
+    } else {
+      $showMenu.state = -1;
+      tree.setSelectedNode(null)
+    }
+  }
 </script>
 
 <g
@@ -30,7 +45,7 @@
   {#if node.type === "extension"}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <polygon
-      on:click={() => tree.setSelectedNode(selected ? null : node)}
+      on:click={handleOnClick}
       class:selected
       points="
         {-currentWidth/2},0
