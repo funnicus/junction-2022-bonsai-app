@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { userStore } from "$lib/stores/user";
+	import Button from "$lib/components/Button.svelte";
+import { userStore } from "$lib/stores/user";
 
 
 
@@ -35,5 +36,29 @@
     <input type="password" bind:value={password} />
   </label>
 
-  <input type="submit" value="Log In" />
+  <Button type="submit" onClick={handleLogin}>
+    Log In
+  </Button>
 </form>
+
+<style>
+  form {
+    max-width: 40rem;
+    margin: 0 auto;
+    margin-top: 5rem;
+  
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+  }
+
+  input[type="text"], input[type="password"] {
+    padding: .5rem;
+    border-radius: .5rem;
+    border: 2px solid var(--brown);
+  }
+
+</style>
