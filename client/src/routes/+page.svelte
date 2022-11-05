@@ -27,6 +27,7 @@
   }
 
   setContext('menuState', menuState);
+  setContext('tree', treeStore);
 
 
   onMount(() => {
