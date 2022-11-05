@@ -18,21 +18,20 @@ import type { TreeStore } from "$lib/stores/tree";
 </script>
 
 {#if $treeStore.showLeaves}
-<g style="z-index: 30">
-  <g transform="translate(-20, 10) scale(.6) rotate({-rnd*130})" fill="#679133">
-    <Leaf2 />
-  </g>
-  <g transform="translate(0, 0) scale(.3) rotate({-rnd*450})" fill="#74a339">
-    <Leaf1 />
-  </g>
-  <g transform="translate(0, 10) scale(0.25) rotate({rnd*360})" fill="#74a339">
-    <Leaf2 />
-  </g>
-  <g transform="translate(-5, -5) scale(0.25) rotate({-rnd*270})" fill="#6C9D2D">
-    <Leaf1 />
-  </g>
-  <polygon x="0" y="0" fill="#6C9D2D" points="{generateLeafPath(scale, depth.toString())}" />
+  <g style="z-index: 30; pointer-events: none;" class="container">
+    <g transform="translate(-20, 10) scale(.6) rotate({-rnd*130})" fill="#679133">
+      <Leaf2 />
+    </g>
+    <g transform="translate(0, 0) scale(.3) rotate({-rnd*450})" fill="#74a339">
+      <Leaf1 />
+    </g>
+    <g transform="translate(0, 10) scale(0.25) rotate({rnd*360})" fill="#74a339">
+      <Leaf2 />
+    </g>
+    <g transform="translate(-5, -5) scale(0.25) rotate({-rnd*270})" fill="#6C9D2D">
+      <Leaf1 />
+    </g>
+    <polygon x="0" y="0" fill="#6C9D2D" points="{generateLeafPath(scale, depth.toString())}" />
 
-</g>
+  </g>
 {/if}
-

@@ -37,22 +37,44 @@
 
 <svelte:window on:keydown={handleKeyDown} on:keyup={handleKeyUp} /> 
 
-<div class="tree-view">
-  <Tree store={treeStore} />
-</div>
-
-<div style="display: flex; justify-content: center;">
-    <Menu />
+<div class="page" class:menuOpen={$menuState.state > -1}>
+  <div class="tree-view">
+    <Tree store={treeStore} />
+  </div>
+  
+  <div class="menu" class:visible={$menuState.state > -1}>
+      <Menu />
+  </div>
 </div>
 
 <style>
-  label {
+  .page {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
   .tree-view {
+    transform: translateY(150px);
+    transition: transform 500ms;
+  }
+
+  .page.menuOpen .tree-view {
+    transform: scale(1.25) translateY(-70px);
+  }
+
+  .menu {
+    position: absolute;
     display: flex;
+    bottom: 2rem;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 200ms;
+  }
+  
+  .menu.visible {
+    opacity: 1;
   }
 </style>
 
