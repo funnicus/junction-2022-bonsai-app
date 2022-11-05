@@ -80,12 +80,13 @@ pub async fn edit_quiz(
     claims: Claims,
     data: Json<serde_json::Value>,
 ) -> Result<Status, BadRequest<String>> {
-    let _user: User = sqlx::query_as("UPDATE users SET quiz_results = $1 WHERE username = $2")
-        .bind(data.0)
-        .bind(claims.name)
-        .fetch_one(&state.0)
-        .await
-        .map_err(|e| BadRequest(Some(e.to_string())))?;
+    let _user: Option<User> =
+        sqlx::query_as("UPDATE users SET quiz_results = $1 WHERE username = $2")
+            .bind(data.0)
+            .bind(claims.name)
+            .fetch_optional(&state.0)
+            .await
+            .map_err(|e| BadRequest(Some(e.to_string())))?;
 
     Ok(Status::Ok)
 }

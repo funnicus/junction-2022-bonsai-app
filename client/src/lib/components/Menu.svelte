@@ -6,11 +6,13 @@
 	import { getContext } from "svelte";
 	import type { Writable } from "svelte/store";
 	import type { TreeStore } from "$lib/stores/tree";
+	import Leaf from "./Leaf.svelte";
 
     const treeState = getContext<TreeStore>('tree');
     const state = getContext<Writable<{state: number}>>('menuState');
     const tree = getContext<TreeStore>('tree');
     let selectedOption: MenuItem;
+    let isLeaf = 1;
 
     const menuContent: MenuContent = {
         title: "What would you like to do?",
@@ -54,11 +56,12 @@
     function resetState(){
         // Menu is hidden
         $state.state = -1;
-        if(Math.random() > 0.7){
+        if(isLeaf){
             tree.addLeaf();
-        }
-        tree.addExtension($tree.previewAngle, $tree.previewLength);
-        tree.setSelectedNode(null);
+        }else{
+            tree.addExtension($tree.previewAngle, $tree.previewLength);
+        }    
+            tree.setSelectedNode(null);
     }
 </script>
 
@@ -84,6 +87,15 @@
                 Select length: {$tree.previewLength}
                 <input type="range" min="20" max="75" bind:value={$tree.previewLength} />
             </label>
+
+            <label style="margin-left: 10px">
+                <input type=radio bind:group={isLeaf} value={1} /> Leaf
+            </label>
+            
+            <label style="margin-left: 10px">
+                <input type=radio bind:group={isLeaf} value={0} /> Branch
+            </label>
+
         </div>
 
         <button class="button" on:click={handleOptionCompletion}> <b> Confirm </b> </button>

@@ -100,6 +100,12 @@
     stroke: transparent;
     stroke-width: 0;
     transition: stroke 200ms, stroke-width 200ms;
+    cursor: pointer;
+  }
+
+  polygon:hover {
+    stroke: #FF658A;
+    stroke-width: 2;
   }
 
   polygon.selected {
