@@ -49,6 +49,7 @@
   <input type="range" min="20" max="75" bind:value={$treeStore.previewLength} />
 </label>
 
+<button on:click={() => $treeStore.selectedNode && treeStore.removeNode($treeStore.selectedNode)}>delete node</button>
 <button on:click={treeStore.addLeaf}>add leaf</button>
 <button on:click={() => treeStore.addExtension($treeStore.previewAngle, $treeStore.previewLength)}>
   add extension
