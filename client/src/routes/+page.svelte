@@ -1,9 +1,11 @@
 <script lang="ts">
 	import Tree from "$lib/components/Tree.svelte";
 	import { createTreeStore } from "$lib/stores/tree";
-	import { onMount } from "svelte";
+	import { onMount, setContext } from "svelte";
 
   let tree = createTreeStore()
+
+  setContext("tree", tree);
 
   let angle = 0
   let length = 50
@@ -13,14 +15,31 @@
   onMount(() => {
     fetch("https://bonsai-health.shuttleapp.rs/").then((data) => console.log(data))
   })
-  
+
   $:console.log($tree.nodes)
 
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if(event.code === "Tab") {
+      event.preventDefault()
+      tree.toggleLeaves(false)
+    }
+  }
+
+  const handleKeyUp = (event: KeyboardEvent) => {
+    if(event.code === "Tab") {
+      event.preventDefault()
+      tree.toggleLeaves(true)
+    }
+  }
+
 </script>
+
 <h1>Welcome to SvelteKit</h1>
 <p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
 
 <a href="/bonsai">To 🅱️ONSAI</a>
+
+<svelte:window on:keydown={handleKeyDown} on:keyup={handleKeyUp} /> 
 
 <div>
   <Tree
