@@ -1,7 +1,13 @@
-<script>
+<script lang="ts">
 	import Button from "$lib/components/Button.svelte";
   import { goto } from "$app/navigation";
   import QuestionSlider from "$lib/components/QuestionSlider.svelte";
+
+  let physicalActivity = 0;
+
+  function onSubmit(e: SubmitEvent) {
+  }
+
 
 </script>
 
@@ -10,8 +16,8 @@
     How are you feeling about the following aspects in your life at this current time?
   </p>
 
-  <form class="questions-form">
-    <QuestionSlider label={"Physical Activity"} />
+  <form class="questions-form" method="POST" on:submit|preventDefault={onSubmit}>
+    <QuestionSlider label={"Physical Activity"} bind:value={physicalActivity} />
 
     <QuestionSlider label={"Social Relations"} />
 
@@ -19,10 +25,7 @@
 
     <QuestionSlider label={"Work/Life balance"} />
 
-    <Button style={"font-size: 2em; margin-top: 50px;"} type={"submit"} onClick={(event) => {
-      event.preventDefault()
-      goto("/")
-    }} >
+    <Button style={"font-size: 2em; margin-top: 50px;"} type={"submit"} >
       Confirm
     </Button>
   </form>

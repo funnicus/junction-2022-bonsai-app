@@ -1,5 +1,7 @@
 <script lang="ts">
   export let label: string;
+
+  export let value = 5;
 </script>
 
 <div class="input-label">
@@ -7,7 +9,7 @@
   <label for={label}>{label}</label>
   <div>🙂</div>
 </div>
-<input id={label} type="range" />
+<input id={label} type="range" bind:value={value} min=0 max=10>
 
 <style>
   .input-label {

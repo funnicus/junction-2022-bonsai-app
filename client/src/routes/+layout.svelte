@@ -1,5 +1,9 @@
 <script>
+	import { goto } from "$app/navigation";
 	import Settings from "$lib/icons/Settings.svelte";
+
+  import { userStore } from "$lib/stores/user";
+
 </script>
 
 

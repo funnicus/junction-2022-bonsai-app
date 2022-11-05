@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { userStore } from "$lib/stores/user";
+
+
 
   let username = "";
   let password = "";
@@ -6,7 +9,7 @@
   const handleLogin = async (e: any) => {
     e.preventDefault();
 
-    const res = await fetch("https://bonsai-health.shuttleapp.rs/login", {
+    const data = await fetch("https://bonsai-health.shuttleapp.rs/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -15,9 +18,9 @@
         username,
         password
       }),
-    });
+    }).then((res) => res.json());
 
-    console.log(await res.text());
+    $userStore = await data.token;
   }
 </script>
 
