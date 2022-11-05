@@ -2,6 +2,9 @@
   <ul>
     <li>Hold TAB to hide leaves</li>
   </ul>
+
+
+  <p>Click on the tree to begin</p>
 </div>
 
 <style lang="scss">

@@ -9,6 +9,7 @@
 	import { userStore } from "$lib/stores/user";
 	import { fly } from "svelte/transition";
 	import Button from "./Button.svelte";
+	import { shuffleArray } from "$lib/utils/array";
 
     const treeState = getContext<TreeStore>('tree');
     const state = getContext<Writable<{state: number; isLeaf: number}>>('menuState');
@@ -17,7 +18,8 @@
     let selectedOption: Task;
 
     onMount( async () => {
-        tasks = await fetch("https://bonsai-health.shuttleapp.rs/tasks/get_tasks").then(d => d.json());
+        const fetchedTasks = await fetch("https://bonsai-health.shuttleapp.rs/tasks/get_tasks").then(d => d.json());
+        tasks = shuffleArray(fetchedTasks)
     });
 
     function handleOptionSelection(selection: Task){
