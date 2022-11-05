@@ -7,6 +7,7 @@
 	import { createMenuStore } from "$lib/stores/menu";
 	import { goto } from "$app/navigation";
 	import ToolTips from "$lib/components/ToolTips.svelte";
+	import Banner from "$lib/components/Banner.svelte";
 
   export let tree: Data[];
 

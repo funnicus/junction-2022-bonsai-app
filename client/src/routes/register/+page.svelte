@@ -19,12 +19,14 @@ import { userStore } from "$lib/stores/user";
         username,
         password
       }),
-    }).then((res) => res.json());
+    }).then((res) => res.json()).catch(() => alert("Try again!"));;
 
     $userStore = await data.token;
 
     window.localStorage.setItem("token", $userStore);
     window.localStorage.setItem("username", data.username);
+
+    alert("Registered!")
 
     goto("/");
   }

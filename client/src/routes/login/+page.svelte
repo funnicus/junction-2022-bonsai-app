@@ -18,12 +18,16 @@
         username,
         password
       }),
-    }).then((res) => res.json());
+    }).then((res) => res.json()).catch(err => alert("Try again!"));
+
+    if(!data) return;
 
     $userStore = await data.token;
 
     window.localStorage.setItem("token", $userStore);
     window.localStorage.setItem("username", data.username);
+
+    alert("You have successfully logged in!")
 
     goto("/");
   }
