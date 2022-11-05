@@ -146,39 +146,3 @@ pub async fn register(
     };
     Ok(Json(response))
 }
-
-// NOTE: This is a hardcoded test user
-#[get("/create_user")]
-pub async fn create_user(state: &State<MyState>) -> Result<Json<UserResponse>, BadRequest<String>> {
-    let salt = SaltString::generate(&mut OsRng);
-
-    // Argon2 with default params (Argon2id v19)
-    let argon2 = Argon2::default();
-
-    // Hash password to PHC string ($argon2id$v=19$...)
-    let password_hash = argon2
-        .hash_password(b"test", &salt)
-        .map_err(|err| BadRequest(Some(err.to_string())))?
-        .to_string();
-
-    let user = Json(User {
-        username: "test".to_string(),
-        password_hash,
-        data: serde_json::Value::Null,
-        completed_tasks: vec![],
-        quiz_results: serde_json::Value::Null,
-    });
-    let user:User = sqlx::query_as(
-        "INSERT INTO users(username, password_hash, data, completed_tasks, quiz_results) VALUES ($1,$2,$3, $4, $5) RETURNING id, username, password_hash, data, completed_tasks, quiz_results",
-    )
-    .bind(&user.username)
-    .bind(&user.password_hash)
-    .bind(&user.data)
-    .bind(&user.completed_tasks)
-    .bind(&user.quiz_results)
-    .fetch_one(&state.0)
-    .await
-    .map_err(|e| BadRequest(Some(e.to_string())))?;
-
-    Ok(Json(UserResponse::from_user(user)))
-}

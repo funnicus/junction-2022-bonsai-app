@@ -1,8 +1,9 @@
 <script>
 	import { onMount } from "svelte";
 	import { goto } from "$app/navigation";
-  import QuestionMark from "$lib/icons/QuestionMark.svelte";
   import { userStore } from "$lib/stores/user";
+	import { browser } from "$app/environment";
+	import Smile from "$lib/icons/Smile.svelte";
 
   onMount(() => {
     $userStore = window.localStorage.getItem("token") || "";
@@ -10,18 +11,17 @@
 
 </script>
 
-
 <nav>
   <div>
-    <a href="questionnaire"><QuestionMark /></a>
+    <a href="questionnaire"><Smile /></a>
   </div>
 
-  {#if $userStore}
+  {#if $userStore && browser}
     <span>Logged in as <b>{window.localStorage.getItem("username")}</b></span>
   {/if}
 
   <div>
-    {#if $userStore}
+    {#if $userStore && browser}
       <button class="logging-btn" on:click={() => {
           window.localStorage.removeItem("token")
           window.localStorage.removeItem("tree")

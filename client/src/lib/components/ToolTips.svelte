@@ -1,16 +1,21 @@
 <div class="tooltips">
   <ul>
-    <li>Hold TAB to toggle leaves off.</li>
+    <li>Hold TAB to hide leaves</li>
   </ul>
+
+
+  <p>Click on the tree to begin</p>
 </div>
 
 <style lang="scss">
   .tooltips {
     position: absolute;
     width: fit-content;
-    top: 20%;
-    left: 30px;
+    top: 1.25rem;
+    left: 4rem;
     z-index: 1;
+
+    font-size: 14px;
 
     &> ul {
       list-style: none;

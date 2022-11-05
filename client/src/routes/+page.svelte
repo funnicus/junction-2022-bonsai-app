@@ -3,15 +3,12 @@
 	import { createTreeStore } from "$lib/stores/tree";
   import Menu from "$lib/components/Menu.svelte";
 	import { onMount, setContext } from "svelte";
-	import type { Data } from "$lib/dataSchema";
 	import { createMenuStore } from "$lib/stores/menu";
 	import { goto } from "$app/navigation";
 	import ToolTips from "$lib/components/ToolTips.svelte";
 	import Banner from "$lib/components/Banner.svelte";
 
-  export let tree: Data[];
-
-  let menuState = createMenuStore();
+  const menuState = createMenuStore();
 
   const treeStore = createTreeStore()
 
@@ -32,10 +29,6 @@
   setContext('menuState', menuState);
   setContext('tree', treeStore);
 
-  onMount(() => {
-    //if(!window.localStorage.getItem("token") && window.location.href !== "/login") goto("/login");
-  })
-
   onMount(async () => {
     const user = await fetch("https://bonsai-health.shuttleapp.rs/user/data", {
       method: "GET",
@@ -54,6 +47,10 @@
 </script>
 
 <svelte:window on:keydown={handleKeyDown} on:keyup={handleKeyUp} /> 
+
+<svelte:head>
+  <title>The Bonsai</title>
+</svelte:head>
 
 <ToolTips />
 
