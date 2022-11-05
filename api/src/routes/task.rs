@@ -8,6 +8,7 @@ use sqlx::FromRow;
 
 use crate::{authentication::Claims, routes::user::UserResponse, MyState};
 
+#[derive(Serialize, Deserialize, FromRow)]
 struct Task {
     title: String,
     description: String,
@@ -26,19 +27,20 @@ pub async fn get_tasks(
 
     Ok(Json(UserResponse::from_user(user)))
 }
-/*
+
 #[post("/task/add_task", data = "<data>")]
 pub async fn add_task(
     state: &State<MyState>,
     data: Json<serde_json::Value>,
 ) -> Result<Status, BadRequest<String>> {
-    let _user: Task = sqlx::query_as("UPDATE users SET data = $1 WHERE username = $2")
-        .bind(data.0)
-        .bind(claims.name)
-        .fetch_one(&state.0)
-        .await
-        .map_err(|e| BadRequest(Some(e.to_string())))?;
+    let _user: Task = sqlx::query_as(
+        "INSERT INTO tasks(title, description) VALUES ($1,$2) RETURNING title, description",
+    )
+    .bind(data.0.get("title").unwrap())
+    .bind(data.0.get("description").unwrap())
+    .fetch_one(&state.0)
+    .await
+    .map_err(|e| BadRequest(Some(e.to_string())))?;
 
     Ok(Status::Ok)
 }
-*/
