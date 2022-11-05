@@ -14,14 +14,15 @@ pub struct User {
     pub username: String,
     pub password_hash: String,
     data: serde_json::Value,
-    completedTasks: Vec<i32>,
+    completed_tasks: Vec<i32>,
+    quiz_results: serde_json::Value,
 }
 #[derive(Serialize, Deserialize)]
 pub struct UserResponse {
     pub id: i32,
     pub username: String,
     data: serde_json::Value,
-    completedTasks: Vec<i32>,
+    completed_tasks: Vec<i32>,
 }
 impl UserResponse {
     pub fn from_user(user: User) -> Self {
@@ -29,7 +30,7 @@ impl UserResponse {
             id: user.id,
             username: user.username,
             data: user.data,
-            completedTasks: user.completedTasks,
+            completed_tasks: user.completed_tasks,
         }
     }
 }
@@ -43,7 +44,7 @@ struct Data {
     length: Option<i32>,
 }
 
-#[get("/user")]
+#[get("/data")]
 pub async fn get_user(
     state: &State<MyState>,
     claims: Claims,
@@ -57,7 +58,7 @@ pub async fn get_user(
     Ok(Json(UserResponse::from_user(user)))
 }
 
-#[post("/user/edit_tree", data = "<data>")]
+#[post("/edit_tree", data = "<data>")]
 pub async fn edit_tree(
     state: &State<MyState>,
     claims: Claims,
@@ -73,14 +74,14 @@ pub async fn edit_tree(
     Ok(Status::Ok)
 }
 
-#[post("/user/complete_task", data = "<task_id>")]
+#[post("/complete_task", data = "<task_id>")]
 pub async fn complete_task(
     state: &State<MyState>,
     claims: Claims,
     task_id: Json<i32>,
 ) -> Result<Status, BadRequest<String>> {
     let _user: User =
-        sqlx::query_as("UPDATE users SET array_append(completedTasks, $1) WHERE username = $2")
+        sqlx::query_as("UPDATE users SET array_append(completed_tasks, $1) WHERE username = $2")
             .bind(task_id.0)
             .bind(claims.name)
             .fetch_one(&state.0)
@@ -90,6 +91,7 @@ pub async fn complete_task(
     Ok(Status::Ok)
 }
 
+// NOTE: This is a hardcoded test user
 #[get("/create_user")]
 pub async fn create_user(state: &State<MyState>) -> Result<Json<UserResponse>, BadRequest<String>> {
     let salt = SaltString::generate(&mut OsRng);
@@ -108,14 +110,17 @@ pub async fn create_user(state: &State<MyState>) -> Result<Json<UserResponse>, B
         username: "test".to_string(),
         password_hash,
         data: serde_json::Value::Null,
-        completedTasks: vec![],
+        completed_tasks: vec![],
+        quiz_results: serde_json::Value::Null,
     });
     let user:User = sqlx::query_as(
-        "INSERT INTO users(username, password_hash, data) VALUES ($1,$2,$3) RETURNING id, username, password_hash, data",
+        "INSERT INTO users(username, password_hash, data, completed_tasks, quiz_results) VALUES ($1,$2,$3, $4, $5) RETURNING id, username, password_hash, data, completed_tasks, quiz_results",
     )
     .bind(&user.username)
     .bind(&user.password_hash)
     .bind(&user.data)
+    .bind(&user.completed_tasks)
+    .bind(&user.quiz_results)
     .fetch_one(&state.0)
     .await
     .map_err(|e| BadRequest(Some(e.to_string())))?;

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { TreeStore } from "$lib/stores/tree";
 	import { degToRad } from "$lib/utils/number";
-	import { createEventDispatcher, getContext } from "svelte";
+	import { getContext } from "svelte";
 	import type { Writable } from "svelte/store";
 	import { scale } from "svelte/transition";
 	import type { Data } from "../dataSchema";
@@ -24,8 +24,14 @@
   const currentWidth = Math.max(width - (depth*1.5), 3);
 
   function handleOnClick(){
-    $showMenu.state = 0;
-    tree.setSelectedNode(selected ? null : node)
+
+    if (!selected) {
+      $showMenu.state = 0;
+      tree.setSelectedNode(node)
+    } else {
+      $showMenu.state = -1;
+      tree.setSelectedNode(null)
+    }
   }
 </script>
 
@@ -60,7 +66,7 @@
           x2={-Math.sin(degToRad($tree.previewAngle)) * (($tree.previewLength-4) ?? 0)}
           y2={Math.cos(degToRad($tree.previewAngle)) * (($tree.previewLength-4) ?? 0)}
           stroke-dasharray="4"
-          stroke="blue"
+          stroke="#FF658A"
           stroke-width={3}
         />
 
@@ -68,7 +74,7 @@
           cx={-Math.sin(degToRad($tree.previewAngle)) * (($tree.previewLength-4) ?? 0)}
           cy={Math.cos(degToRad($tree.previewAngle)) * (($tree.previewLength-4) ?? 0)}
           r="5"
-          stroke="blue"
+          stroke="#FF658A"
           fill="transparent"
           stroke-width={2}
         />
@@ -97,7 +103,7 @@
   }
 
   polygon.selected {
-    stroke: blue;
+    stroke: #FF658A;
     stroke-width: 2;
 
   }
