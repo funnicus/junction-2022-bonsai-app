@@ -21,7 +21,7 @@
   </div>
 
   {#if $userStore}
-    <span>Logged in as <b>{"user"}</b></span>
+    <span>Logged in as <b>{window.localStorage.getItem("username")}</b></span>
   {/if}
 
   <div>
@@ -85,9 +85,9 @@
     text-decoration: underline;
   }
 
-
   body {
     margin: 0;
     height: 100%;
+    border: 1px solid transparent; // try to guess why this is here :)
   }
 </style>
