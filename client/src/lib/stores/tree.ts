@@ -15,7 +15,6 @@ export type TreeStore = Writable<TreeState> & {
 	addExtension: (angle: number, length: number) => void;
 	setSelectedNode: (node: Data | null) => void;
 	toggleLeaves: (show: boolean) => void;
-	setPreviewData: (angle: number, length: number) => void;
 	removeNode: (node: Data) => void;
 };
 
@@ -122,7 +121,6 @@ export const createTreeStore = (): TreeStore => {
 		addExtension,
 		setSelectedNode,
 		toggleLeaves,
-		setPreviewData,
 		removeNode
 	};
 };

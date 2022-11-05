@@ -1,14 +1,11 @@
 <script lang="ts">
 	import type { TreeStore } from "$lib/stores/tree";
-	import { setContext } from "svelte";
 	import TreeNode from "./TreeNode.svelte";
 	import Vase from "./Vase.svelte";
   
   export let store: TreeStore;
 
   const INITIAL_WIDTH = 15;
-
-  setContext('tree', store);
 </script>
 
 <svg viewBox="0 0 500 500" width="500">
