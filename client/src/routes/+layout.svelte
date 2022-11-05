@@ -85,9 +85,9 @@
     text-decoration: underline;
   }
 
-
   body {
     margin: 0;
     height: 100%;
+    border: 1px solid transparent; // mysteerimikitin
   }
 </style>
