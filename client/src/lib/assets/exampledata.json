@@ -10,7 +10,8 @@
 				"length": 5,
 				"type": "extension",
 				"taskId": "9843kl43k5j43l5j43",
-				"time": 32948024230948
+				"time": 32948024230948,
+				"children": []
 			},
 			{
 				"length": 5,
@@ -21,6 +22,8 @@
 					{
 						"length": 5,
 						"type": "leaf",
+						"taskId": "9843kl43k5j43l5j43",
+						"time": 32948024230948,
 						"children": []
 					}
 				]
