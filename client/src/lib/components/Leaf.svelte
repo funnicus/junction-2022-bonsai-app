@@ -1,5 +1,7 @@
 <script lang="ts">
-	import type { TreeStore } from "$lib/stores/tree";
+	import Leaf1 from "$lib/icons/Leaf1.svelte";
+	import Leaf2 from "$lib/icons/Leaf2.svelte";
+import type { TreeStore } from "$lib/stores/tree";
 	import { generateLeafPath } from "$lib/utils/path";
   import random from 'seedrandom';
 
@@ -17,10 +19,20 @@
 
 {#if $treeStore.showLeaves}
 <g style="z-index: 30">
+  <g transform="translate(-20, 10) scale(.6) rotate({-rnd*130})" fill="#679133">
+    <Leaf2 />
+  </g>
+  <g transform="translate(0, 0) scale(.3) rotate({-rnd*450})" fill="#74a339">
+    <Leaf1 />
+  </g>
+  <g transform="translate(0, 10) scale(0.25) rotate({rnd*360})" fill="#74a339">
+    <Leaf2 />
+  </g>
+  <g transform="translate(-5, -5) scale(0.25) rotate({-rnd*270})" fill="#6C9D2D">
+    <Leaf1 />
+  </g>
   <polygon x="0" y="0" fill="#6C9D2D" points="{generateLeafPath(scale, depth.toString())}" />
-  <polygon transform="translate(5, 5) scale(0.5) rotate({rnd*360})" fill="#74a339" points="{generateLeafPath(scale, (depth + 1).toString())}" />
-  <polygon transform="translate(-5, -5) scale(0.75) rotate({-rnd*180})" fill="#6C9D2D" points="{generateLeafPath(scale, (depth + 1).toString())}" />
-  <polygon transform="translate(-15, 5) scale(0.5) rotate({-rnd*180})" fill="#679133" points="{generateLeafPath(scale, (depth + 1).toString())}" />
+
 </g>
 {/if}
 
