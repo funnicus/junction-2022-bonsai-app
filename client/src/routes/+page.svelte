@@ -3,6 +3,9 @@
 	import { createTreeStore } from "$lib/stores/tree";
   import Menu from "$lib/components/Menu.svelte";
 	import { onMount } from "svelte";
+	import type { Data } from "$lib/dataSchema";
+
+  export let tree: Data[];
 
   const treeStore = createTreeStore()
 
