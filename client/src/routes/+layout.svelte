@@ -16,7 +16,6 @@
 
 <nav>
   <div>
-    <a href="/settings"><Settings /></a>
     <a href="questionnaire"><QuestionMark /></a>
   </div>
 
@@ -46,6 +45,10 @@
 
 <style lang="scss" global>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap');
+
+  * {
+    box-sizing: border-box;
+  }
   
   :root {
     --bg: #FFE2D1;
