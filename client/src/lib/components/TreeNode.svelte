@@ -24,8 +24,14 @@
   const currentWidth = Math.max(width - (depth*1.5), 3);
 
   function handleOnClick(){
-    $showMenu.state = 0;
-    tree.setSelectedNode(selected ? null : node)
+
+    if (!selected) {
+      $showMenu.state = 0;
+      tree.setSelectedNode(node)
+    } else {
+      $showMenu.state = -1;
+      tree.setSelectedNode(null)
+    }
   }
 </script>
 

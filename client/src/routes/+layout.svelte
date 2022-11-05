@@ -15,7 +15,7 @@
 
 <style lang="scss" global>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap');
-
+  
   :root {
     --bg: #FFE2D1;
     --brown: #A15022;

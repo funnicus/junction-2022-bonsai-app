@@ -5,7 +5,9 @@
 	import Check from "$lib/icons/Check.svelte";
 	import { getContext } from "svelte";
 	import type { Writable } from "svelte/store";
+	import type { TreeStore } from "$lib/stores/tree";
 
+    const treeState = getContext<TreeStore>('tree');
     const state = getContext<Writable<{state: number}>>('menuState');
     let selectedOption: MenuItem;
 
@@ -35,7 +37,9 @@
 
     function handleBackClick(){
         if($state.state === 0){
-            console.log("Closing menu")
+            console.log("Closing menu");
+            treeState.setSelectedNode(null)
+
         }
         console.log(`Switching state from ${$state.state} to ${$state.state - 1}`)
         $state.state--;
@@ -103,17 +107,12 @@
 </div>
 {/if}
 
-
-
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200&display=swap');
-
   .menuContainer {
     border: 2px solid rgb(161, 80, 34);
     color: rgb(161, 80, 34);
     width: 400px;
     min-height: 300px;
-    font-family: 'Inter', sans-serif;
     padding: 15px;
     display: flex;
     flex-flow: column;
