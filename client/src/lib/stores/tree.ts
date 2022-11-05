@@ -1,19 +1,27 @@
 import type { Data } from '$lib/dataSchema';
-import { writable, type Readable } from 'svelte/store';
+import { writable, type Writable } from 'svelte/store';
 import treeData from '$lib/assets/tree.json';
-import { prevent_default } from 'svelte/internal';
 
-type TreeState = { selectedNode: Data | null; nodes: Data[]; showLeaves: boolean };
+type TreeState = {
+	selectedNode: Data | null;
+	nodes: Data[];
+	showLeaves: boolean;
+	previewAngle: number;
+	previewLength: number;
+};
 
-export type TreeStore = Readable<TreeState> & {
+export type TreeStore = Writable<TreeState> & {
 	addLeaf: () => void;
 	addExtension: (angle: number, length: number) => void;
 	setSelectedNode: (node: Data | null) => void;
 	toggleLeaves: (show: boolean) => void;
+	setPreviewData: (angle: number, length: number) => void
 };
 
 export const createTreeStore = (): TreeStore => {
 	const state = writable<TreeState>({
+		previewAngle: 0,
+		previewLength: 20,
 		selectedNode: null,
 		showLeaves: true,
 		nodes: []
@@ -71,11 +79,18 @@ export const createTreeStore = (): TreeStore => {
 		});
 	};
 
+	const setPreviewData = (angle: number, length: number) => {
+		state.update(prev => ({...prev, previewAngle: angle, previewLength: length }))
+	}
+
 	return {
 		subscribe: state.subscribe,
+		set: state.set,
+		update: state.update,
 		addLeaf,
 		addExtension,
 		setSelectedNode,
-		toggleLeaves
+		toggleLeaves,
+		setPreviewData
 	};
 };

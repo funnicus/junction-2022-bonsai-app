@@ -2,36 +2,27 @@
 	import Tree from "$lib/components/Tree.svelte";
 	import { createTreeStore } from "$lib/stores/tree";
   import Menu from "$lib/components/Menu.svelte";
-	import { onMount, setContext } from "svelte";
+	import { onMount } from "svelte";
 
-  let tree = createTreeStore()
-
-  setContext("tree", tree);
-
-  let angle = 0
-  let length = 50
-
-  //$:console.log(tree)
-
-  onMount(() => {
-    fetch("https://bonsai-health.shuttleapp.rs/").then((data) => console.log(data))
-  })
-
-  $:console.log($tree.nodes)
+  const treeStore = createTreeStore()
 
   const handleKeyDown = (event: KeyboardEvent) => {
     if(event.code === "Tab") {
       event.preventDefault()
-      tree.toggleLeaves(false)
+      treeStore.toggleLeaves(false)
     }
   }
 
   const handleKeyUp = (event: KeyboardEvent) => {
     if(event.code === "Tab") {
       event.preventDefault()
-      tree.toggleLeaves(true)
+      treeStore.toggleLeaves(true)
     }
   }
+
+  onMount(() => {
+    fetch("https://bonsai-health.shuttleapp.rs/").then((data) => console.log(data))
+  })
 
 </script>
 
@@ -43,13 +34,7 @@
 <svelte:window on:keydown={handleKeyDown} on:keyup={handleKeyUp} /> 
 
 <div>
-  <Tree
-    nodes={$tree.nodes}
-    on:select={e => tree.setSelectedNode(e.detail)}
-    selectedNode={$tree.selectedNode}
-    {angle}
-    {length}
-  />
+  <Tree store={treeStore} />
 </div>
 
 <div style="display: flex; justify-content: center;">
@@ -57,17 +42,19 @@
 </div>
 
 <label>
-  angle: {angle} deg
-  <input type="range" min="-45" max="45" bind:value={angle} />
+  angle: {$treeStore.previewAngle} deg
+  <input type="range" min="-45" max="45" bind:value={$treeStore.previewAngle} />
 </label>
 
 <label>
-  length: {length}
-  <input type="range" min="20" max="75" bind:value={length} />
+  length: {$treeStore.previewLength}
+  <input type="range" min="20" max="75" bind:value={$treeStore.previewLength} />
 </label>
 
-<button on:click={tree.addLeaf}>add leaf</button>
-<button on:click={() => tree.addExtension(angle, length)}>add extension</button>
+<button on:click={treeStore.addLeaf}>add leaf</button>
+<button on:click={() => treeStore.addExtension($treeStore.previewAngle, $treeStore.previewLength)}>
+  add extension
+</button>
 
 <style>
   label {
