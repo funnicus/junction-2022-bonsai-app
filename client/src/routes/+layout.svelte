@@ -1,19 +1,22 @@
 <script>
-	import { goto } from "$app/navigation";
-	import Settings from "$lib/icons/Settings.svelte";
-
-  import { userStore } from "$lib/stores/user";
 	import { onMount } from "svelte";
+	import { goto } from "$app/navigation";
+  
+	import Settings from "$lib/icons/Settings.svelte";
+  import QuestionMark from "$lib/icons/QuestionMark.svelte";
+  
+  import { userStore } from "$lib/stores/user";
 
   onMount(() => {
     $userStore = window.localStorage.getItem("token") || "";
   });
+
 </script>
 
 
 <nav>
   <a href="/settings"><Settings /></a>
-  <a href="questionnaire">Questions</a>
+  <a href="questionnaire"><QuestionMark /></a>
 </nav>
 
 <main>
@@ -48,21 +51,6 @@
 
   body {
     margin: 0;
+    height: 100%;
   }
-
-  .view {
-    height: 100vh;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-
-    nav {
-      height: 3%;
-    }
-    main {
-      height: 97%;
-    }
-  }
-
-
 </style>

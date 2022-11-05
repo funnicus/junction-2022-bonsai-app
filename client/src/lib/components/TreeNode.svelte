@@ -1,5 +1,7 @@
 <script lang="ts">
-	import type { TreeStore } from "$lib/stores/tree";
+	import Leaf1 from "$lib/icons/Leaf1.svelte";
+	import Leaf2 from "$lib/icons/Leaf2.svelte";
+import type { TreeStore } from "$lib/stores/tree";
 	import { degToRad } from "$lib/utils/number";
 	import { getContext } from "svelte";
 	import type { Writable } from "svelte/store";
@@ -12,9 +14,7 @@
   export let width: number;
 
   const tree = getContext<TreeStore>('tree')
-  const showMenu  = getContext<Writable<{state: number}>>('menuState');
-
-
+  const showMenu  = getContext<Writable<{state: number; isLeaf: number}>>('menuState');
 
   $: selected = $tree.selectedNode === node
 
@@ -60,25 +60,30 @@
     
     <g transform="translate({x2} {y2}) rotate({node.angle})">
       {#if selected}
-        <line
-          x1={0}
-          y1={0}
-          x2={-Math.sin(degToRad($tree.previewAngle)) * (($tree.previewLength-4) ?? 0)}
-          y2={Math.cos(degToRad($tree.previewAngle)) * (($tree.previewLength-4) ?? 0)}
-          stroke-dasharray="4"
-          stroke="#FF658A"
-          stroke-width={3}
-        />
+        {#if !$showMenu.isLeaf}
+          <line
+            x1={0}
+            y1={0}
+            x2={-Math.sin(degToRad($tree.previewAngle)) * (($tree.previewLength-4) ?? 0)}
+            y2={Math.cos(degToRad($tree.previewAngle)) * (($tree.previewLength-4) ?? 0)}
+            stroke-dasharray="4"
+            stroke="#FF658A"
+            stroke-width={3}
+          />
 
-        <circle
-          cx={-Math.sin(degToRad($tree.previewAngle)) * (($tree.previewLength-4) ?? 0)}
-          cy={Math.cos(degToRad($tree.previewAngle)) * (($tree.previewLength-4) ?? 0)}
-          r="5"
-          stroke="#FF658A"
-          fill="transparent"
-          stroke-width={2}
-        />
-
+          <circle
+            cx={-Math.sin(degToRad($tree.previewAngle)) * (($tree.previewLength-4) ?? 0)}
+            cy={Math.cos(degToRad($tree.previewAngle)) * (($tree.previewLength-4) ?? 0)}
+            r="5"
+            stroke="#FF658A"
+            fill="transparent"
+            stroke-width={2}
+          />
+        {:else}
+        <g transform="translate(-25 -5)">
+          <Leaf1 color="transparent" stroke="#FF658A" />
+        </g>
+        {/if}
       {/if}
 
       {#each node.children as child}

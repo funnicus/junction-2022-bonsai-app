@@ -7,12 +7,12 @@
 	import type { Writable } from "svelte/store";
 	import type { TreeStore } from "$lib/stores/tree";
 	import { userStore } from "$lib/stores/user";
+	import { fly } from "svelte/transition";
 
     const treeState = getContext<TreeStore>('tree');
-    const state = getContext<Writable<{state: number}>>('menuState');
+    const state = getContext<Writable<{state: number; isLeaf: number}>>('menuState');
     const tree = getContext<TreeStore>('tree');
     let selectedOption: MenuItem;
-    let isLeaf = 1;
 
     const menuContent: MenuContent = {
         title: "What would you like to do?",
@@ -56,13 +56,14 @@
     function resetState(){
         // Menu is hidden
         $state.state = -1;
-        if(isLeaf) {
+        if($state.isLeaf){
             tree.addLeaf();
         } else {
             tree.addExtension($tree.previewAngle, $tree.previewLength);
         }    
 
         tree.setSelectedNode(null);
+        $state.isLeaf = 0;
 
         fetch("https://bonsai-health.shuttleapp.rs/user/edit_tree", {
             method: "POST",
@@ -79,13 +80,11 @@
 
     function onSubmit() {
         console.log($userStore);
-        
-  }
+    }
 </script>
 
 {#if $state.state >= 0}
-<div class="menuContainer">
-
+<div class="menuContainer" transition:fly={{y: 100, duration: 200, opacity: 0}}>
     {#if $state.state === 0}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="backIcon" on:click={handleBackClick}>
@@ -96,6 +95,19 @@
             <b>How do you want to grow your Bonsai?</b>
         </div>
         <div style="display: flex; flex-direction: column; justify-content: space-evenly;">
+            
+            
+            <div style="display: flex; margin-top: .5rem; margin-bottom: .5rem;">
+                <label style="margin-left: 10px">
+                    <input type=radio bind:group={$state.isLeaf} value={0} /> Branch
+                </label>
+    
+                <label style="margin-left: 10px">
+                    <input type=radio bind:group={$state.isLeaf} value={1} /> Leaf
+                </label>
+            </div>
+
+            {#if !$state.isLeaf}
             <label class="slider">
                 <div>Select angle: {$tree.previewAngle}°</div>
                 <input type="range" min="-45" max="45" bind:value={$tree.previewAngle} />
@@ -105,14 +117,8 @@
                 Select length: {$tree.previewLength}
                 <input type="range" min="20" max="75" bind:value={$tree.previewLength} />
             </label>
-
-            <label style="margin-left: 10px">
-                <input type=radio bind:group={isLeaf} value={1} /> Leaf
-            </label>
+            {/if}
             
-            <label style="margin-left: 10px">
-                <input type=radio bind:group={isLeaf} value={0} /> Branch
-            </label>
 
         </div>
 
@@ -145,20 +151,19 @@
 
         <div class="menuItemDescription">{selectedOption.description}</div>
 
-        <button class="button" on:click={handleOptionCompletion}> <b> Mark as complete </b> </button>
+        <button class="button" on:click={handleOptionCompletion}> <b>Start</b> </button>
     {/if}
 
     {#if $state.state === 3}
-        <div class="title">
+        <div class="title-2">
             <b>
-                <i>{selectedOption.title}</i> complete!
+                <i>{selectedOption.title}</i> started!
             </b>
         </div>
 
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="checkMark" on:click={resetState}>
-
-            <Check />
+            Mark as done <Check />
         </div>
     {/if}
 </div>
@@ -166,7 +171,6 @@
 
 <style>
   .menuContainer {
-    /* border: 2px solid rgb(161, 80, 34); */
     color: rgb(161, 80, 34);
     width: 400px;
     min-height: 300px;
@@ -182,6 +186,13 @@
     align-self: center;
     margin-top: 10px;
     margin-bottom: 10px;
+    height: fit-content;
+    font-size: 1.2em;
+  }
+
+  .title-2 {
+    align-self: center;
+    margin: auto;
     height: fit-content;
     font-size: 1.2em;
   }
@@ -232,11 +243,13 @@
   }
 
   .checkMark {
-    margin-top: auto;
     color: rgb(161, 80, 34);
     width: fit-content;
-    padding: 10px;
+    padding: 10px 20px;
+    display: flex;
+    gap: .6rem;
     align-self: center;
+    align-items: center;
     justify-self: end;
     border-radius: 5px;
     border: none;

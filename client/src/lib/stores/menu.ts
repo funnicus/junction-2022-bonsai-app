@@ -1,9 +1,10 @@
-import { writable } from "svelte/store";
+import { writable } from 'svelte/store';
 
 export const createMenuStore = () => {
-    const menuState = writable({
-        state: -1,
-    })
+	const menuState = writable({
+		state: -1,
+		isLeaf: 0
+	});
 
-    return menuState
+	return menuState;
 };

@@ -9,9 +9,8 @@
   let hobbies = 5;
   let workLifeBalance = 5;
 
-  function onSubmit() {
-    console.log($userStore);
-    fetch("https://bonsai-health.shuttleapp.rs/user/edit_quiz", {
+  async function onSubmit() {
+    await fetch("https://bonsai-health.shuttleapp.rs/user/edit_quiz", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -24,6 +23,8 @@
         workLifeBalance,
       }),
     })
+
+    goto("/");
   }
 
 
