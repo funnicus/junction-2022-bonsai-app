@@ -2,6 +2,7 @@
 	import Tree from "$lib/components/Tree.svelte";
 	import type { Data } from "$lib/dataSchema";
 	import { createTreeStore } from "$lib/stores/tree";
+    import Menu from "$lib/components/Menu.svelte";
 
   let tree = createTreeStore()
 
@@ -26,6 +27,10 @@
   />
 </div>
 
+<div style="display: flex; justify-content: center;">
+    <Menu />
+</div>
+
 <label>
   angle: {angle} deg
   <input type="range" min="-45" max="45" bind:value={angle} />
@@ -45,3 +50,5 @@
     flex-direction: column;
   }
 </style>
+
+
