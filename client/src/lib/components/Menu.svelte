@@ -6,7 +6,7 @@
 	import { getContext } from "svelte";
 	import type { Writable } from "svelte/store";
 	import type { TreeStore } from "$lib/stores/tree";
-	import Leaf from "./Leaf.svelte";
+	import { userStore } from "$lib/stores/user";
 
     const treeState = getContext<TreeStore>('tree');
     const state = getContext<Writable<{state: number}>>('menuState');
@@ -56,13 +56,31 @@
     function resetState(){
         // Menu is hidden
         $state.state = -1;
-        if(isLeaf){
+        if(isLeaf) {
             tree.addLeaf();
-        }else{
+        } else {
             tree.addExtension($tree.previewAngle, $tree.previewLength);
         }    
-            tree.setSelectedNode(null);
+
+        tree.setSelectedNode(null);
+
+        fetch("https://bonsai-health.shuttleapp.rs/user/edit_tree", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + $userStore
+            },
+            body: JSON.stringify({
+                nodes: $tree.nodes,
+            }),
+        })
     }
+
+
+    function onSubmit() {
+        console.log($userStore);
+        
+  }
 </script>
 
 {#if $state.state >= 0}

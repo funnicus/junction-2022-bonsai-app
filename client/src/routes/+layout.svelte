@@ -3,7 +3,11 @@
 	import Settings from "$lib/icons/Settings.svelte";
 
   import { userStore } from "$lib/stores/user";
+	import { onMount } from "svelte";
 
+  onMount(() => {
+    $userStore = window.localStorage.getItem("token") || "";
+  });
 </script>
 
 

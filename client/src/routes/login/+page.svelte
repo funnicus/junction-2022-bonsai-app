@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { userStore } from "$lib/stores/user";
 
-
-
   let username = "";
   let password = "";
 
@@ -21,6 +19,8 @@
     }).then((res) => res.json());
 
     $userStore = await data.token;
+
+    window.localStorage.setItem("token", $userStore);
   }
 </script>
 
