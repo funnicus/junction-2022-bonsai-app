@@ -4,7 +4,6 @@
 
     let state = 0;
     let selectedOption: MenuItem;
-    const defaultTitle = "What would you like to do?"
 
     const menuContent: MenuContent = {
         title: "What would you like to do?",
@@ -49,21 +48,31 @@
 
         {#if state === 0}
             <div class="title">
-                <b>{defaultTitle}</b>
+                <b>{menuContent.title}</b>
             </div>
 
             {#each menuContent.options as m }
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <div class="menuItem" on:click={() => handleOptionSelection(m)}>{m.title}</div>
             {/each}
+        {/if}    
         
-        {:else}
+        {#if state === 1}
             <div class="title">
-                {selectedOption.title}
+                <b>{selectedOption.title}</b>
             </div>
 
             <div class="menuItemDescription">{selectedOption.description}</div>
 
+            <button class="button" > <b> Start </b> </button>
+        {/if}
+
+        {#if state === 2}
+            <div class="title">
+                <b>{selectedOption.title}</b>
+            </div>
+
+            <button class="button"> <b> Mark as complete </b> </button>
         {/if}
 </div>
 {/if}
@@ -71,17 +80,23 @@
 
 
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200&display=swap');
+
   .menuContainer {
+    color: rgb(161, 80, 34);
+    width: 400px;
+    font-family: 'Inter', sans-serif;
     padding: 15px;
     display: flex;
     flex-flow: column;
-    align-items: center;
+    /* align-items: center; */
     border-radius: 20px;
     /* background: linear-gradient(to bottom, rgba(0,0,0,0), #FFE2D1 25%); */
     box-shadow: 0px 2px 10px 0px grey;
 }
 
   .title {
+    align-self: center;
     margin-top: 10px;
     margin-bottom: 10px;
     height: fit-content;
@@ -90,33 +105,46 @@
 
   .menuItem {
     margin: 20px;
-    /* border: 1px black solid; */
-    /* background: rgba(255,255,255,.6); */
     border-radius: 5px;
-    animation-duration: 2s;
-    animation-iteration-count: infinite;
+    transition: 0.3s;
   }
 
   .menuItem:hover {
     cursor: pointer;
-    animation-name: bounce;
-    animation-timing-function: ease;
+    transform: scale(1.05);
+
+  }
+
+  .menuItemDescription {
+    margin: 20px;
   }
 
   .backIcon {
     display: flex;
     align-self: start;
+    transition: 0.6s;
   }
   
   .backIcon:hover {
     cursor: pointer;
-    animation-name: bounce;
-    animation-timing-function: ease;
+    transform: scale(1.25);
+    transform: rotate(-360deg);
   }
 
-  @keyframes bounce {
-    0%   { transform: scale(1); }
-    25%  { transform: scale(1.1); }
-    100% { transform: scale(1); }
+  .button {
+    color: rgb(161, 80, 34);
+    width: fit-content;
+    padding: 10px;
+    align-self: center;
+    border-radius: 5px;
+    border: none;
+    background: rgba(161, 80, 34, .15);
+    transition: 0.3s;
   }
+  button:hover {
+    cursor: pointer;
+    background: rgba(161, 80, 34, .15);
+    transform: scale(1.15);
+  }
+
 </style>
