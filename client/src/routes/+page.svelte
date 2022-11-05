@@ -2,10 +2,13 @@
 	import Tree from "$lib/components/Tree.svelte";
 	import { createTreeStore } from "$lib/stores/tree";
   import Menu from "$lib/components/Menu.svelte";
-	import { onMount } from "svelte";
+	import { onMount, setContext } from "svelte";
 	import type { Data } from "$lib/dataSchema";
+	import { createMenuStore } from "$lib/stores/menu";
 
   export let tree: Data[];
+
+  let menuState = createMenuStore();
 
   const treeStore = createTreeStore()
 
@@ -22,6 +25,9 @@
       treeStore.toggleLeaves(true)
     }
   }
+
+  setContext('menuState', menuState);
+
 
   onMount(() => {
     fetch("https://bonsai-health.shuttleapp.rs/").then((data) => console.log(data))
@@ -49,6 +55,7 @@
   <input type="range" min="20" max="75" bind:value={$treeStore.previewLength} />
 </label>
 
+<button on:click={() => $treeStore.selectedNode && treeStore.removeNode($treeStore.selectedNode)}>delete node</button>
 <button on:click={treeStore.addLeaf}>add leaf</button>
 <button on:click={() => treeStore.addExtension($treeStore.previewAngle, $treeStore.previewLength)}>
   add extension
