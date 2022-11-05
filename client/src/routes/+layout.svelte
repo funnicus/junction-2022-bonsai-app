@@ -1,7 +1,10 @@
+<script>
+	import Settings from "$lib/icons/Settings.svelte";
+</script>
+
 
 <nav>
-  <a href="/">Home</a>
-  <a href="/settings">Settings</a>
+  <a href="/settings"><Settings /></a>
 </nav>
 
 <main>
@@ -14,6 +17,16 @@
     background: #FFE2D1;
     height: 100%;
   }
+
+  nav {
+    margin: 16px;
+
+    a {
+    color: #A15022;
+  }
+  }
+
+
 
   body {
     margin: 0;

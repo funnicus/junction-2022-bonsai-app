@@ -28,7 +28,7 @@
 
 <svelte:window on:keydown={handleKeyDown} on:keyup={handleKeyUp} /> 
 
-<div>
+<div class="tree-view">
   <Tree store={treeStore} />
 </div>
 
