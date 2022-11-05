@@ -43,7 +43,7 @@ struct Data {
     length: Option<i32>,
 }
 
-#[get("/user")]
+#[get("/data")]
 pub async fn get_user(
     state: &State<MyState>,
     claims: Claims,
@@ -57,7 +57,7 @@ pub async fn get_user(
     Ok(Json(UserResponse::from_user(user)))
 }
 
-#[post("/user/edit_tree", data = "<data>")]
+#[post("/edit_tree", data = "<data>")]
 pub async fn edit_tree(
     state: &State<MyState>,
     claims: Claims,
@@ -73,7 +73,7 @@ pub async fn edit_tree(
     Ok(Status::Ok)
 }
 
-#[post("/user/complete_task", data = "<task_id>")]
+#[post("/complete_task", data = "<task_id>")]
 pub async fn complete_task(
     state: &State<MyState>,
     claims: Claims,
@@ -90,6 +90,7 @@ pub async fn complete_task(
     Ok(Status::Ok)
 }
 
+// NOTE: This is a hardcoded test user
 #[get("/create_user")]
 pub async fn create_user(state: &State<MyState>) -> Result<Json<UserResponse>, BadRequest<String>> {
     let salt = SaltString::generate(&mut OsRng);
