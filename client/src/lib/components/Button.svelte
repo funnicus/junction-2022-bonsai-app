@@ -1,9 +1,10 @@
 <script lang="ts">
-  export let text: string;
   export let type: string | undefined;
+  export let style = "";
+  export let onClick: (event: Event) => void | Promise<void> | undefined;
 </script>
 
-<button type={type} class="button"> <b>{text}</b> </button>
+<button style={style} type={type} on:click={onClick} class="button"> <b><slot></slot></b> </button>
 
 <style>
   .button {
@@ -17,7 +18,7 @@
     transition: 0.3s;
   }
 
-  button:hover {
+  .button:hover {
     cursor: pointer;
     background: rgba(161, 80, 34, .15);
     transform: scale(1.15);

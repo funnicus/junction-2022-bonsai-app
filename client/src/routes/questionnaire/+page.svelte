@@ -1,6 +1,7 @@
 <script>
 	import Button from "$lib/components/Button.svelte";
-import QuestionSlider from "$lib/components/QuestionSlider.svelte";
+  import { goto } from "$app/navigation";
+  import QuestionSlider from "$lib/components/QuestionSlider.svelte";
 
 </script>
 
@@ -9,7 +10,7 @@ import QuestionSlider from "$lib/components/QuestionSlider.svelte";
     How are you feeling about the following aspects in your life at this current time?
   </p>
 
-  <form action="">
+  <form class="questions-form">
     <QuestionSlider label={"Physical Activity"} />
 
     <QuestionSlider label={"Social Relations"} />
@@ -18,16 +19,27 @@ import QuestionSlider from "$lib/components/QuestionSlider.svelte";
 
     <QuestionSlider label={"Work/Life balance"} />
 
-    <Button type={"submit"} text={"Submit"} />
+    <Button style={"font-size: 2em; margin-top: 50px;"} type={"submit"} onClick={(event) => {
+      event.preventDefault()
+      goto("/")
+    }} >
+      Confirm
+    </Button>
   </form>
 
 
 </div>
 
-<style>
+<style lang="scss">
   .questions {
     max-width: 700px;
     margin: auto;
+    padding: 20px;
+  }
+
+  .questions-form {
+    display: flex;
+    flex-direction: column;
   }
 
   .input-label {
