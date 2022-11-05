@@ -1,5 +1,7 @@
+
+
 export type Data = {
-	type: string;
+	type: 'extension' | 'leaf';
 	time: number;
 	children: Data[];
 	taskId: string;

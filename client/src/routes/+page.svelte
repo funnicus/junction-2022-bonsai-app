@@ -1,8 +1,13 @@
 <script lang="ts">
 	import Tree from "$lib/components/Tree.svelte";
-  import data from '$lib/assets/example2.json';
+	import { createTreeStore } from "$lib/stores/tree";
 
-  const d = data as any
+  let tree = createTreeStore()
+
+  let angle = 0
+  let length = 50
+
+  $:console.log($tree.nodes)
 
 </script>
 <h1>Welcome to SvelteKit</h1>
@@ -10,5 +15,32 @@
 
 <a href="/bonsai">To 🅱️ONSAI</a>
 
-<Tree nodes={d} />
+<div>
+  <Tree
+    nodes={$tree.nodes}
+    on:select={e => tree.setSelectedNode(e.detail)}
+    selectedNode={$tree.selectedNode}
+    {angle}
+    {length}
+  />
+</div>
 
+<label>
+  angle: {angle} deg
+  <input type="range" min="-45" max="45" bind:value={angle} />
+</label>
+
+<label>
+  length: {length}
+  <input type="range" min="20" max="75" bind:value={length} />
+</label>
+
+<button on:click={tree.addLeaf}>add leaf</button>
+<button on:click={() => tree.addExtension(angle, length)}>add extension</button>
+
+<style>
+  label {
+    display: flex;
+    flex-direction: column;
+  }
+</style>
