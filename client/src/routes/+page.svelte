@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Tree from "$lib/components/Tree.svelte";
-	import type { Data } from "$lib/dataSchema";
 	import { createTreeStore } from "$lib/stores/tree";
 	import { onMount } from "svelte";
 
@@ -14,6 +13,8 @@
   onMount(() => {
     fetch("https://bonsai-health.shuttleapp.rs/").then((data) => console.log(data))
   })
+  
+  $:console.log($tree.nodes)
 
 </script>
 <h1>Welcome to SvelteKit</h1>

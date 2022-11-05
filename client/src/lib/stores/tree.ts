@@ -1,5 +1,7 @@
 import type { Data } from "$lib/dataSchema"
 import { writable, type Readable } from "svelte/store"
+import treeData from '$lib/assets/tree.json'
+import { prevent_default } from "svelte/internal"
 
 type TreeState = {selectedNode: Data | null, nodes: Data[]}
 
@@ -10,20 +12,16 @@ export type TreeStore = Readable<TreeState> & {
 }
 
 
-
 export const createTreeStore = (): TreeStore => {
   const state = writable<TreeState>({
     selectedNode: null,
-    nodes:[
-    {
-      type:'extension',
-      length: 20,
-      angle: 5,
-      children: [],
-      taskId: "",
-      time: Date.now()
-    }
-  ]})
+    nodes: []
+  })
+
+  // load tree after 1 ms, giving it a starting animation
+  setTimeout(() => {
+    state.update(prev => ({...prev, nodes: treeData as any}))
+  }, 1)
 
   const addLeaf = () => {
     const item: Data =  {
@@ -36,7 +34,6 @@ export const createTreeStore = (): TreeStore => {
     state.update(prev => {
       if (!prev.selectedNode) return prev
       prev.selectedNode?.children.push(item)
-      prev.selectedNode = null // clear selection
       return prev
     })
   }
