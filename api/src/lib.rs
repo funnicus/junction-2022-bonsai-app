@@ -1,4 +1,5 @@
 mod authentication;
+mod cors;
 
 #[macro_use]
 extern crate rocket;
@@ -8,6 +9,7 @@ use argon2::{
     Argon2, PasswordHash, PasswordVerifier,
 };
 use authentication::Claims;
+use cors::Cors;
 use rocket::response::status::{BadRequest, Unauthorized};
 use rocket::serde::json::Json;
 use rocket::State;
@@ -158,5 +160,6 @@ async fn rocket(#[shuttle_shared_db::Postgres] pool: PgPool) -> shuttle_service:
 
     Ok(rocket::build()
         .manage(state)
+        .attach(Cors)
         .mount("/", routes![index, create_user, get_user, login]))
 }
