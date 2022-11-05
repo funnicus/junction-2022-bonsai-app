@@ -10,9 +10,12 @@ use argon2::{
 };
 use authentication::Claims;
 use cors::Cors;
-use rocket::response::status::{BadRequest, Unauthorized};
 use rocket::serde::json::Json;
 use rocket::State;
+use rocket::{
+    http::Status,
+    response::status::{BadRequest, Unauthorized},
+};
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use shuttle_service::error::CustomError;
@@ -160,15 +163,15 @@ async fn edit_tree(
     state: &State<MyState>,
     claims: Claims,
     data: Json<serde_json::Value>,
-) -> Result<Json<UserResponse>, BadRequest<String>> {
-    let user = sqlx::query_as("UPDATE users SET data = $1 WHERE username = $2")
+) -> Result<Status, BadRequest<String>> {
+    let _user: User = sqlx::query_as("UPDATE users SET data = $1 WHERE username = $2")
         .bind(data.0)
         .bind(claims.name)
         .fetch_one(&state.0)
         .await
         .map_err(|e| BadRequest(Some(e.to_string())))?;
 
-    Ok(Json(UserResponse::from_user(user)))
+    Ok(Status::Ok)
 }
 
 #[shuttle_service::main]
