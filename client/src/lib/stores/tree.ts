@@ -1,6 +1,6 @@
 import type { Data } from '$lib/dataSchema';
 import type { Writable } from 'svelte/store';
-import { writable } from 'svelte-local-storage-store';
+import { writable } from 'svelte/store';
 
 type TreeState = {
 	selectedNode: Data | null;
@@ -20,7 +20,7 @@ export type TreeStore = Writable<TreeState> & {
 };
 
 export const createTreeStore = (): TreeStore => {
-	const state = writable<TreeState>('tree', {
+	const state = writable<TreeState>({
 		previewAngle: 0,
 		previewLength: 20,
 		selectedNode: null,
@@ -36,11 +36,6 @@ export const createTreeStore = (): TreeStore => {
 			}
 		]
 	});
-
-	// // load tree after 1 ms, giving it a starting animation
-	// setTimeout(() => {
-	// 	state.update((prev) => ({ ...prev, nodes: treeData as any }));
-	// }, 1);
 
 	const addLeaf = () => {
 		const item: Data = {
@@ -89,10 +84,6 @@ export const createTreeStore = (): TreeStore => {
 		});
 	};
 
-	const setPreviewData = (angle: number, length: number) => {
-		state.update((prev) => ({ ...prev, previewAngle: angle, previewLength: length }));
-	};
-
 	const recursiveDelete = (nodes: Data[], nodeToDelete: Data): boolean => {
 		for (const node of nodes) {
 			if (node === nodeToDelete) {
@@ -116,7 +107,7 @@ export const createTreeStore = (): TreeStore => {
 
 	const setNodes = (nodes: Data[]) => {
 		state.update((prev) => {
-			prev.nodes[0].children = nodes;
+			prev.nodes = nodes;
 			return prev;
 		});
 	};

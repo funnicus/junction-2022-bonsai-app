@@ -31,13 +31,6 @@
 </form>
 
 <style>
-  form {
-    max-width: 40rem;
-    margin: 0 auto;
-    margin-top: 5rem;
-  
-  }
-
   .form-footer {
     display: flex;
     justify-content: space-between;
