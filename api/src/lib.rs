@@ -5,7 +5,8 @@ pub mod routes;
 #[macro_use]
 extern crate rocket;
 
-use crate::routes::user::{create_user, edit_tree, get_user};
+use crate::routes::task::{add_task, get_tasks};
+use crate::routes::user::{complete_task, create_user, edit_tree, get_user};
 use argon2::{Argon2, PasswordHash, PasswordVerifier};
 use authentication::Claims;
 use cors::Cors;
@@ -76,8 +77,17 @@ async fn rocket(#[shuttle_shared_db::Postgres] pool: PgPool) -> shuttle_service:
         .map_err(CustomError::new)?;
     let state = MyState(pool);
 
-    Ok(rocket::build()
-        .manage(state)
-        .attach(Cors)
-        .mount("/", routes![index, create_user, get_user, login, edit_tree]))
+    Ok(rocket::build().manage(state).attach(Cors).mount(
+        "/",
+        routes![
+            index,
+            create_user,
+            get_user,
+            login,
+            edit_tree,
+            complete_task,
+            get_tasks,
+            add_task
+        ],
+    ))
 }
