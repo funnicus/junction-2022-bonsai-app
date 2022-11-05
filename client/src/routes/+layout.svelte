@@ -5,6 +5,7 @@
 
 <nav>
   <a href="/settings"><Settings /></a>
+  <a href="questionnaire">Questions</a>
 </nav>
 
 <main>
@@ -48,10 +49,10 @@
     flex-direction: column;
 
     nav {
-      height: 25%;
+      height: 3%;
     }
     main {
-      height: 75%;
+      height: 97%;
     }
   }
 
