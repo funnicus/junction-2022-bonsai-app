@@ -73,6 +73,23 @@ pub async fn edit_tree(
     Ok(Status::Ok)
 }
 
+#[post("/user/complete_task", data = "<task_id>")]
+pub async fn complete_task(
+    state: &State<MyState>,
+    claims: Claims,
+    task_id: Json<i32>,
+) -> Result<Status, BadRequest<String>> {
+    let _user: User =
+        sqlx::query_as("UPDATE users SET array_append(completedTasks, $1) WHERE username = $2")
+            .bind(task_id.0)
+            .bind(claims.name)
+            .fetch_one(&state.0)
+            .await
+            .map_err(|e| BadRequest(Some(e.to_string())))?;
+
+    Ok(Status::Ok)
+}
+
 #[get("/create_user")]
 pub async fn create_user(state: &State<MyState>) -> Result<Json<UserResponse>, BadRequest<String>> {
     let salt = SaltString::generate(&mut OsRng);
