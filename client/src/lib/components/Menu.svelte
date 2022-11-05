@@ -54,6 +54,8 @@
     function resetState(){
         // Menu is hidden
         $state.state = -1;
+        // math.random :D
+        tree.addExtension($tree.previewAngle, $tree.previewLength)
     }
 </script>
 
@@ -66,11 +68,26 @@
             <CloseIcon />
         </div>
 
-        <input type="range" min="-45" max="45" bind:value={$tree.previewAngle} />
+        <div class="title">
+            <b>How do you want to grow your Bonsai?</b>
+        </div>
+        <div style="display: flex; flex-direction: column; justify-content: space-evenly;">
+            <label class="slider">
+                <div>Select angle: {$tree.previewAngle}°</div>
+                <input type="range" min="-45" max="45" bind:value={$tree.previewAngle} />
+            </label>
+    
+            <label class="slider">
+                Select length: {$tree.previewLength}
+                <input type="range" min="20" max="75" bind:value={$tree.previewLength} />
+            </label>
+        </div>
+
+        <button class="button" on:click={handleOptionCompletion}> <b> Confirm </b> </button>
 
     {/if}  
 
-    {#if $state.state !== 1 && $state.state !== 3}
+    {#if $state.state !== 0 && $state.state !== 3}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="backIcon" on:click={handleBackClick}>
             <ArrowLeft />
@@ -78,11 +95,6 @@
     {/if}
 
     {#if $state.state === 1}
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div class="backIcon" on:click={handleBackClick}>
-            <CloseIcon />
-        </div>
-
         <div class="title">
             <b>{menuContent.title}</b>
         </div>
@@ -112,6 +124,7 @@
 
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="checkMark" on:click={resetState}>
+
             <Check />
         </div>
     {/if}
@@ -120,7 +133,7 @@
 
 <style>
   .menuContainer {
-    border: 2px solid rgb(161, 80, 34);
+    /* border: 2px solid rgb(161, 80, 34); */
     color: rgb(161, 80, 34);
     width: 400px;
     min-height: 300px;
@@ -129,6 +142,7 @@
     flex-flow: column;
     border-radius: 20px;
     box-shadow: 0px 2px 10px 0px grey;
+    background: #ffeadf;
 }
 
   .title {
@@ -140,9 +154,11 @@
   }
 
   .menuItem {
-    margin: 20px;
+    margin: 10px;
+    padding: 10px;
     border-radius: 5px;
     transition: 0.3s;
+    background: rgba(161, 80, 34, .15);
   }
 
   .menuItem:hover {
@@ -198,6 +214,19 @@
   .checkMark:hover {
     cursor: pointer;
     transform: scale(1.15);
+  }
+
+  .slider {
+    display: flex;
+    flex-direction: column;
+    align-content: space-around;
+    margin: 10px;
+    /* Kovakoodasin tän, whatchu gonna do??? */
+    min-width: 351px;
+    align-self: center;
+    background: rgba(161, 80, 34, .15);
+    border-radius: 5px;
+    padding: 10px;
   }
 
 </style>
