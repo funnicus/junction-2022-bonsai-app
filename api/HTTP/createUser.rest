@@ -1,1 +1,0 @@
-GET https://bonsai-health.shuttleapp.rs/create_user HTTP/1.1

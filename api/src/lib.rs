@@ -6,7 +6,7 @@ pub mod routes;
 extern crate rocket;
 
 use crate::routes::task::{add_task, get_tasks};
-use crate::routes::user::{complete_task, create_user, edit_quiz, edit_tree, get_user, register};
+use crate::routes::user::{complete_task, edit_quiz, edit_tree, get_user, register};
 use argon2::{Argon2, PasswordHash, PasswordVerifier};
 use authentication::Claims;
 use cors::Cors;
@@ -26,7 +26,7 @@ struct LoginRequest {
 }
 
 #[derive(Serialize)]
-struct LoginResponse {
+pub struct LoginResponse {
     token: String,
     username: String,
 }
@@ -81,7 +81,7 @@ async fn rocket(#[shuttle_shared_db::Postgres] pool: PgPool) -> shuttle_service:
     Ok(rocket::build()
         .manage(state)
         .attach(Cors)
-        .mount("/", routes![index, create_user, login, register])
+        .mount("/", routes![index, login, register])
         .mount(
             "/user",
             routes![get_user, complete_task, edit_tree, edit_quiz],

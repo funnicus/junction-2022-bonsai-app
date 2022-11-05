@@ -6,7 +6,7 @@ use rocket::{http::Status, response::status::BadRequest, serde::json::Json, Stat
 use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
 
-use crate::{authentication::Claims, MyState};
+use crate::{authentication::Claims, LoginResponse, MyState};
 
 #[derive(FromRow)]
 pub struct User {
@@ -105,7 +105,7 @@ pub async fn complete_task(
 pub async fn register(
     state: &State<MyState>,
     data: Json<RegisterRequest>,
-) -> Result<Json<UserResponse>, BadRequest<String>> {
+) -> Result<Json<LoginResponse>, BadRequest<String>> {
     let salt = SaltString::generate(&mut OsRng);
 
     // Argon2 with default params (Argon2id v19)
@@ -136,41 +136,13 @@ pub async fn register(
     .await
     .map_err(|e| BadRequest(Some(e.to_string())))?;
 
-    Ok(Json(UserResponse::from_user(user)))
-}
+    let claim = Claims::from_name(&user.username);
 
-// NOTE: This is a hardcoded test user
-#[get("/create_user")]
-pub async fn create_user(state: &State<MyState>) -> Result<Json<UserResponse>, BadRequest<String>> {
-    let salt = SaltString::generate(&mut OsRng);
-
-    // Argon2 with default params (Argon2id v19)
-    let argon2 = Argon2::default();
-
-    // Hash password to PHC string ($argon2id$v=19$...)
-    let password_hash = argon2
-        .hash_password(b"test", &salt)
-        .map_err(|err| BadRequest(Some(err.to_string())))?
-        .to_string();
-
-    let user = Json(User {
-        username: "test".to_string(),
-        password_hash,
-        data: serde_json::Value::Null,
-        completed_tasks: vec![],
-        quiz_results: serde_json::Value::Null,
-    });
-    let user:User = sqlx::query_as(
-        "INSERT INTO users(username, password_hash, data, completed_tasks, quiz_results) VALUES ($1,$2,$3, $4, $5) RETURNING id, username, password_hash, data, completed_tasks, quiz_results",
-    )
-    .bind(&user.username)
-    .bind(&user.password_hash)
-    .bind(&user.data)
-    .bind(&user.completed_tasks)
-    .bind(&user.quiz_results)
-    .fetch_one(&state.0)
-    .await
-    .map_err(|e| BadRequest(Some(e.to_string())))?;
-
-    Ok(Json(UserResponse::from_user(user)))
+    let response = LoginResponse {
+        token: claim
+            .into_token()
+            .map_err(|error| BadRequest(Some(error.1)))?,
+        username: user.username,
+    };
+    Ok(Json(response))
 }
