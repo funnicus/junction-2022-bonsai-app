@@ -64,10 +64,10 @@ pub async fn edit_tree(
     claims: Claims,
     data: Json<serde_json::Value>,
 ) -> Result<Status, BadRequest<String>> {
-    let _user: User = sqlx::query_as("UPDATE users SET data = $1 WHERE username = $2")
+    let _user: Option<User> = sqlx::query_as("UPDATE users SET data = $1 WHERE username = $2")
         .bind(data.0)
         .bind(claims.name)
-        .fetch_one(&state.0)
+        .fetch_optional(&state.0)
         .await
         .map_err(|e| BadRequest(Some(e.to_string())))?;
 
