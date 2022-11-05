@@ -5,7 +5,6 @@
 	import type { Data } from "../dataSchema";
 	import Leaf from "./Leaf.svelte";
 
-  export let index: number;
   export let node: Data
   export let depth: number
   export let width: number;
@@ -25,7 +24,13 @@
   const dispatch = createEventDispatcher();
 </script>
 
-<g in:scale={{start: 0, duration: 1500, opacity: 1, delay: (depth + (index * 2)) * 250}}>
+<g
+  in:scale={{
+    start: 0,
+    duration: 1500,
+    opacity: 1,
+    delay: Math.min((depth) * 25, 50)
+  }}>
   {#if node.type === "extension"}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <polygon
@@ -65,7 +70,7 @@
 
       {/if}
 
-      {#each node.children as child, i}
+      {#each node.children as child}
         <svelte:self
           node={child}
           depth={depth + 1}
@@ -74,7 +79,6 @@
           on:select
           {angle}
           {length}
-          index={i}
         />
       {/each}
     </g>
@@ -92,7 +96,7 @@
   }
 
   polygon.selected {
-    stroke: red;
+    stroke: blue;
     stroke-width: 2;
 
   }
