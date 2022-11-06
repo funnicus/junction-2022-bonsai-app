@@ -32,4 +32,10 @@
 
     }
   }
+
+  @media screen and (max-width: 700px) {
+    .tooltips {
+      display: none;
+    }
+  }
 </style>

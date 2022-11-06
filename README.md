@@ -2,6 +2,8 @@
 
 For junction 2022 Reaktor challenge.
 
+[Figma designs](https://www.figma.com/file/ny3EfB1YcIUWtRSUBPG1TF/Mental-Health-Bonsai?node-id=0%3A1)
+
 ## Introduction
 
 Very often mental health problems arise because of a lack of certain important things in your life. When individuals are down on their luck, it might be difficult to pinpoint the exact root of the problem, or get an idea how to solve the problem. This might make it hard for these individuals to perform even seemingly basic tasks. The bonsai™️ helps show its users a path to improve their situation by little steps.
