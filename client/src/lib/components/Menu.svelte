@@ -92,12 +92,12 @@
 
             {#if !$state.isLeaf}
             <label class="slider">
-                <div>Select angle: {$tree.previewAngle}°</div>
+                <div>Angle: <b>{$tree.previewAngle}</b>°</div>
                 <input type="range" min="-45" max="45" bind:value={$tree.previewAngle} />
             </label>
     
             <label class="slider">
-                Select length: {$tree.previewLength}
+                <div>Length: <b>{$tree.previewLength}</b></div>
                 <input type="range" min="20" max="75" bind:value={$tree.previewLength} />
             </label>
             {/if}
@@ -209,29 +209,6 @@
     transform: scale(1.25);
   }
 
- 
-
-  .checkMark {
-    color: rgb(161, 80, 34);
-    width: fit-content;
-    padding: 10px 20px;
-    display: flex;
-    gap: .6rem;
-    align-self: center;
-    align-items: center;
-    justify-self: end;
-    border-radius: 5px;
-    border: none;
-    background: rgba(161, 80, 34, .15);
-    transition: 0.3s;
-    transform: scale(0.8);
-  }
-
-  .checkMark:hover {
-    cursor: pointer;
-    transform: scale(1);
-  }
-
   .slider {
     display: flex;
     flex-direction: column;
@@ -243,5 +220,4 @@
     border-radius: 5px;
     padding: 10px;
   }
-
 </style>
